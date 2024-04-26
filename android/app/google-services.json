@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "377307332673",
+    "project_id": "appcittymagic",
+    "storage_bucket": "appcittymagic.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:377307332673:android:002cc0c92a9b49db70c6c0",
+        "android_client_info": {
+          "package_name": "com.example.cittyquibdo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "377307332673-n7a9jo03di6kcaeq68i0m6ksvf7endht.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cittyquibdo",
+            "certificate_hash": "6f195dd621ca40c936304d98cb5d00c2c97e70ad"
+          }
+        },
+        {
+          "client_id": "377307332673-m9a76vphfqlqlcsbhgqn61qhmaqhfbh2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATxPD91HLq8fcT5ZtBehHtZmsiDYQ4Zdw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "377307332673-m9a76vphfqlqlcsbhgqn61qhmaqhfbh2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "377307332673-33obpbv8v8sa4rmh6me8v71hiljlrnu6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.cittyquibdo"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
