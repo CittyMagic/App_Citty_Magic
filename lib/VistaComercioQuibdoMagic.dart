@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class VistaComercioQuibdo extends StatefulWidget {
-  const VistaComercioQuibdo({Key? key}) : super(key: key);
+  const VistaComercioQuibdo({super.key});
 
   @override
   State<VistaComercioQuibdo> createState() => _VistaComercioQuibdoState();
@@ -209,12 +209,12 @@ class _VistaComercioQuibdoState extends State<VistaComercioQuibdo> {
                                                     showDialog(
                                                       context: context,
                                                       builder: (context) => AlertDialog(
-                                                        title: Text("Error"),
-                                                        content: Text("El comercio no existe."),
+                                                        title: const Text("Error"),
+                                                        content: const Text("El comercio no existe."),
                                                         actions: [
                                                           TextButton(
                                                             onPressed: () => Navigator.pop(context),
-                                                            child: Text("Aceptar"),
+                                                            child: const Text("Aceptar"),
                                                           ),
                                                         ],
                                                       ),

@@ -63,21 +63,19 @@ class _VistaMunicipioMagicState extends State<VistaMunicipioMagic> {
         });
 
         // Verificar si la subcolección 'Sitios' existe antes de continuar
-        if (sitiosSnapshot != null) {
-          for (final sitioDoc in (sitiosSnapshot.docs)) {
-            Map<String, dynamic> sitioData = sitioDoc.data();
+        for (final sitioDoc in (sitiosSnapshot.docs)) {
+          Map<String, dynamic> sitioData = sitioDoc.data();
 
-            // Verificar si el nombre o la clave del sitio contiene la consulta
-            if ((sitioData.containsKey("Nombre") &&
-                sitioData["Nombre"] != null &&
-                removeDiacritics(sitioData["Nombre"].toLowerCase()).contains(formattedQuery))){              sitioData["idSitio"] = sitioDoc.id;
-              sitioData["idMunicipio"] = municipioDoc.id;
-              sitioData["idTurismo"] = turismoDoc.id;
-              allResults.add(sitioData);
-            }
+          // Verificar si el nombre o la clave del sitio contiene la consulta
+          if ((sitioData.containsKey("Nombre") &&
+              sitioData["Nombre"] != null &&
+              removeDiacritics(sitioData["Nombre"].toLowerCase()).contains(formattedQuery))){              sitioData["idSitio"] = sitioDoc.id;
+            sitioData["idMunicipio"] = municipioDoc.id;
+            sitioData["idTurismo"] = turismoDoc.id;
+            allResults.add(sitioData);
           }
         }
-
+      
         final comidaSnapshot = await municipioDoc.reference
             .collection("Comida")
             .where("Nombre")
@@ -86,21 +84,19 @@ class _VistaMunicipioMagicState extends State<VistaMunicipioMagic> {
           return null;
         });
 
-        if (comidaSnapshot != null) {
-          for (final comidaDoc in (comidaSnapshot.docs)) {
-            Map<String, dynamic> comidaData = comidaDoc.data();
+        for (final comidaDoc in (comidaSnapshot.docs)) {
+          Map<String, dynamic> comidaData = comidaDoc.data();
 
-            if ((comidaData.containsKey("Nombre") &&
-                comidaData["Nombre"] != null &&
-                removeDiacritics(comidaData["Nombre"].toLowerCase()).contains(formattedQuery))) {
-              comidaData["idSitio"] = comidaDoc.id;
-              comidaData["idMunicipio"] = municipioDoc.id;
-              comidaData["idTurismo"] = turismoDoc.id;
-              allResults.add(comidaData);
-            }
+          if ((comidaData.containsKey("Nombre") &&
+              comidaData["Nombre"] != null &&
+              removeDiacritics(comidaData["Nombre"].toLowerCase()).contains(formattedQuery))) {
+            comidaData["idSitio"] = comidaDoc.id;
+            comidaData["idMunicipio"] = municipioDoc.id;
+            comidaData["idTurismo"] = turismoDoc.id;
+            allResults.add(comidaData);
           }
         }
-
+      
         final entretenimientoSnapshot = await municipioDoc.reference
             .collection("Entretenimiento")
             .where("Nombre")
@@ -109,24 +105,22 @@ class _VistaMunicipioMagicState extends State<VistaMunicipioMagic> {
           return null;
         });
 
-        if (entretenimientoSnapshot != null) {
-          for (final entretenimientoDoc in (entretenimientoSnapshot.docs)) {
-            Map<String, dynamic> entretenimientoData =
-                entretenimientoDoc.data();
+        for (final entretenimientoDoc in (entretenimientoSnapshot.docs)) {
+          Map<String, dynamic> entretenimientoData =
+              entretenimientoDoc.data();
 
-            if ((entretenimientoData.containsKey("Nombre") &&
-                entretenimientoData["Nombre"] != null &&
-                removeDiacritics(entretenimientoData["Nombre"]
-                    .toLowerCase())
-                    .contains(formattedQuery))) {
-              entretenimientoData["idSitio"] = entretenimientoDoc.id;
-              entretenimientoData["idMunicipio"] = municipioDoc.id;
-              entretenimientoData["idTurismo"] = turismoDoc.id;
-              allResults.add(entretenimientoData);
-            }
+          if ((entretenimientoData.containsKey("Nombre") &&
+              entretenimientoData["Nombre"] != null &&
+              removeDiacritics(entretenimientoData["Nombre"]
+                  .toLowerCase())
+                  .contains(formattedQuery))) {
+            entretenimientoData["idSitio"] = entretenimientoDoc.id;
+            entretenimientoData["idMunicipio"] = municipioDoc.id;
+            entretenimientoData["idTurismo"] = turismoDoc.id;
+            allResults.add(entretenimientoData);
           }
         }
-
+      
         final cultutaSnapshot = await municipioDoc.reference
             .collection("Cultura")
             .where("Nombre")
@@ -135,21 +129,19 @@ class _VistaMunicipioMagicState extends State<VistaMunicipioMagic> {
           return null;
         });
 
-        if (cultutaSnapshot != null) {
-          for (final culturaDoc in (cultutaSnapshot.docs)) {
-            Map<String, dynamic> culturaData = culturaDoc.data();
+        for (final culturaDoc in (cultutaSnapshot.docs)) {
+          Map<String, dynamic> culturaData = culturaDoc.data();
 
-            if ((culturaData.containsKey("Nombre") &&
-                culturaData["Nombre"] != null &&
-                removeDiacritics(culturaData["Nombre"].toLowerCase()).contains(formattedQuery))) {
-              culturaData["idSitio"] = culturaDoc.id;
-              culturaData["idMunicipio"] = municipioDoc.id;
-              culturaData["idTurismo"] = turismoDoc.id;
-              allResults.add(culturaData);
-            }
+          if ((culturaData.containsKey("Nombre") &&
+              culturaData["Nombre"] != null &&
+              removeDiacritics(culturaData["Nombre"].toLowerCase()).contains(formattedQuery))) {
+            culturaData["idSitio"] = culturaDoc.id;
+            culturaData["idMunicipio"] = municipioDoc.id;
+            culturaData["idTurismo"] = turismoDoc.id;
+            allResults.add(culturaData);
           }
         }
-
+      
         final informacionSnapshot = await municipioDoc.reference
             .collection("Informacion")
             .where("Nombre")
@@ -158,23 +150,21 @@ class _VistaMunicipioMagicState extends State<VistaMunicipioMagic> {
           return null;
         });
 
-        if (informacionSnapshot != null) {
-          for (final informacionDoc in (informacionSnapshot.docs)) {
-            Map<String, dynamic> informacionData = informacionDoc.data();
+        for (final informacionDoc in (informacionSnapshot.docs)) {
+          Map<String, dynamic> informacionData = informacionDoc.data();
 
-            if ((informacionData.containsKey("Nombre") &&
-                informacionData["Nombre"] != null &&
-                removeDiacritics(informacionData["Nombre"]
-                    .toLowerCase())
-                    .contains(formattedQuery))) {
-              informacionData["idSitio"] = informacionDoc.id;
-              informacionData["idMunicipio"] = municipioDoc.id;
-              informacionData["idTurismo"] = turismoDoc.id;
-              allResults.add(informacionData);
-            }
+          if ((informacionData.containsKey("Nombre") &&
+              informacionData["Nombre"] != null &&
+              removeDiacritics(informacionData["Nombre"]
+                  .toLowerCase())
+                  .contains(formattedQuery))) {
+            informacionData["idSitio"] = informacionDoc.id;
+            informacionData["idMunicipio"] = municipioDoc.id;
+            informacionData["idTurismo"] = turismoDoc.id;
+            allResults.add(informacionData);
           }
         }
-      }
+            }
     }
 
     setState(() {

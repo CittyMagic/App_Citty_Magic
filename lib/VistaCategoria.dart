@@ -6,7 +6,7 @@ import 'package:smooth_star_rating_null_safety/smooth_star_rating_null_safety.da
 class VistaCategoria extends StatefulWidget {
   final String idCategoria;
 
-  const VistaCategoria({Key? key, required this.idCategoria}) : super(key: key);
+  const VistaCategoria({super.key, required this.idCategoria});
 
   @override
   State<VistaCategoria> createState() => _VistaCategoriaState();
@@ -100,7 +100,7 @@ class _VistaCategoriaState extends State<VistaCategoria> {
 
   Widget _buildComercioCard(Map<String, dynamic> comercio) {
     return Card(
-      margin: EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsets.only(bottom: 10),
       child: Padding(
         padding: const EdgeInsets.all(0.0),
         child: ListBody(
@@ -212,10 +212,10 @@ class _VistaCategoriaState extends State<VistaCategoria> {
                 ElevatedButton(
                   onPressed: () {},
                   style: ButtonStyle(
-                    fixedSize: MaterialStateProperty.all(
+                    fixedSize: WidgetStateProperty.all(
                       const Size(190, 30),
                     ),
-                    shape: MaterialStateProperty.all(
+                    shape: WidgetStateProperty.all(
                       const RoundedRectangleBorder(
                           borderRadius: BorderRadius.zero,
                           side: BorderSide.none,
@@ -245,10 +245,10 @@ class _VistaCategoriaState extends State<VistaCategoria> {
                 ElevatedButton(
                   onPressed: () {},
                   style: ButtonStyle(
-                    fixedSize: MaterialStateProperty.all(
+                    fixedSize: WidgetStateProperty.all(
                       const Size(190, 20),
                     ),
-                    shape: MaterialStateProperty.all(
+                    shape: WidgetStateProperty.all(
                       const RoundedRectangleBorder(
                           borderRadius: BorderRadius.zero,
                           side: BorderSide.none),

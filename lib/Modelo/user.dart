@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 class Usuario{
   var _id;

@@ -1,11 +1,9 @@
-import 'package:cittyquibdo/DetailPageSitio.dart';
-import 'package:cittyquibdo/VistaMunicipioMagic.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // Importa Firestore
+// Importa Firestore
 
 class VistaResultado extends StatefulWidget {
   final String query;
-  const VistaResultado({Key? key, required this.query});
+  const VistaResultado({super.key, Key? key, required this.query});
 
   @override
   State<VistaResultado> createState() => _VistaResultadoState();
@@ -14,7 +12,7 @@ class VistaResultado extends StatefulWidget {
 class _VistaResultadoState extends State<VistaResultado> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return const Scaffold();
   }
 }
 
