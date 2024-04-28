@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class VistaTurismo extends StatefulWidget {
-  const VistaTurismo({Key? key}) : super(key: key);
+  const VistaTurismo({super.key});
 
   @override
   State<VistaTurismo> createState() => _VistaTurismoState();

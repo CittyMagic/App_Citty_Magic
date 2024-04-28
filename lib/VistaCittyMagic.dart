@@ -7,8 +7,7 @@ import 'package:flutter/material.dart';
 class VistaCityMagic extends StatefulWidget {
   final String idDepartamento;
 
-  const VistaCityMagic({Key? key, required this.idDepartamento})
-      : super(key: key);
+  const VistaCityMagic({super.key, required this.idDepartamento});
 
   @override
   State<VistaCityMagic> createState() => _VistaCityMagicState();
@@ -69,22 +68,20 @@ class _VistaCityMagicState extends State<VistaCityMagic> {
         });
 
         // Verificar si la subcolección 'Sitios' existe antes de continuar
-        if (sitiosSnapshot != null) {
-          for (final sitioDoc in (sitiosSnapshot.docs)) {
-            Map<String, dynamic> sitioData = sitioDoc.data();
+        for (final sitioDoc in (sitiosSnapshot.docs)) {
+          Map<String, dynamic> sitioData = sitioDoc.data();
 
-            // Verificar si el nombre o la clave del sitio contiene la consulta
-            if ((sitioData.containsKey("Nombre") &&
-                sitioData["Nombre"] != null &&
-                removeDiacritics(sitioData["Nombre"].toLowerCase()).contains(formattedQuery))) {
-              sitioData["idSitio"] = sitioDoc.id;
-              sitioData["idMunicipio"] = municipioDoc.id;
-              sitioData["idTurismo"] = turismoDoc.id;
-              allResults.add(sitioData);
-            }
+          // Verificar si el nombre o la clave del sitio contiene la consulta
+          if ((sitioData.containsKey("Nombre") &&
+              sitioData["Nombre"] != null &&
+              removeDiacritics(sitioData["Nombre"].toLowerCase()).contains(formattedQuery))) {
+            sitioData["idSitio"] = sitioDoc.id;
+            sitioData["idMunicipio"] = municipioDoc.id;
+            sitioData["idTurismo"] = turismoDoc.id;
+            allResults.add(sitioData);
           }
         }
-/*
+      /*
         final comidaSnapshot = await municipioDoc.reference
             .collection("Comida")
             .where("Nombre")
