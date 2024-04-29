@@ -220,7 +220,6 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
             espacio("DescripcionP1"),
             FutureBuilder<Widget>(
               future: carrusel("ImagenesP"),
-
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return snapshot.data!;

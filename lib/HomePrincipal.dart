@@ -2,6 +2,7 @@ import 'package:cittyquibdo/DetailPageSitio.dart';
 import 'package:cittyquibdo/VistaCittyMagic.dart';
 import 'package:cittyquibdo/VistaMunicipioMagic.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 
 class HomePrincipal extends StatefulWidget {
@@ -83,13 +84,11 @@ class _HomePrincipalState extends State<HomePrincipal> {
             for (QueryDocumentSnapshot sitioDoc in sitiosSnapshot.docs) {
               // Obtén los datos del documento "Sitios"
               Map<String, dynamic>? sitioData = sitioDoc.data() as Map<String, dynamic>?;
-
               // Almacena los datos de "Sitios" en el diccionario de sitios
               if (sitioData != null) {
                 sitiosDict[sitioDoc.id] = sitioData;
               }
             }
-
             // Almacena el diccionario de sitios en el diccionario de municipios
             municipioData['Sitios'] = sitiosDict;
           }
@@ -112,7 +111,7 @@ class _HomePrincipalState extends State<HomePrincipal> {
       if (region.containsKey('Nombre') && region['Nombre'] is String) {
         String nombreRegion = region['Nombre'] as String;
         // Verifica si el nombre de la región contiene la consulta
-        if (nombreRegion.toLowerCase().contains(query.toLowerCase())) {
+        if (removeDiacritics(nombreRegion.toLowerCase()).contains(query.toLowerCase())) {
           resultados.add({
             'idTurismo': idTurismo,
             'Nombre': region['Nombre'],
@@ -128,7 +127,7 @@ class _HomePrincipalState extends State<HomePrincipal> {
           if (municipio.containsKey('Nombre') && municipio['Nombre'] is String) {
             String nombreMunicipio = municipio['Nombre'] as String;
             // Verifica si el nombre del municipio contiene la consulta
-            if (nombreMunicipio.toLowerCase().contains(query.toLowerCase())) {
+            if (removeDiacritics(nombreMunicipio.toLowerCase()).contains(query.toLowerCase())) {
               resultados.add({
                 'idTurismo': idTurismo,
                 'idMunicipio': idMunicipio,
@@ -145,7 +144,7 @@ class _HomePrincipalState extends State<HomePrincipal> {
               if (datosSitio.containsKey('Nombre') && datosSitio['Nombre'] is String) {
                 String nombreSitio = datosSitio['Nombre'] as String;
                 // Verifica si el nombre del sitio contiene la consulta
-                if (nombreSitio.toLowerCase().contains(query.toLowerCase())) {
+                if (removeDiacritics(nombreSitio.toLowerCase()).contains(query.toLowerCase())) {
                   resultados.add({
                     'idTurismo': idTurismo,
                     'idMunicipio': idMunicipio,
@@ -299,6 +298,7 @@ class _HomePrincipalState extends State<HomePrincipal> {
                                                     ),
                                               ),
                                             );
+                                            print(resultado);
                                           } else if (idMunicipio != null) {
                                             Navigator.push(
                                               context,
