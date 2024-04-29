@@ -16,98 +16,8 @@ class _HomePrincipalState extends State<HomePrincipal> {
   final FocusNode _focusNode = FocusNode();
   List<Map<String, dynamic>> resultados = [];
   bool isLoading = false;
-
-  Map<String, dynamic> Turismo = {
-    "01": {
-      "Nombre": "Chocó",
-      "Municipios": {
-        '01': {
-          "Nombre": "Quibdó",
-          "Sitios": {
-            "01": "Tutunendo",
-            '02': "Río Ichó",
-            '03': "Malecón",
-          },
-        },
-        '02': {
-          "Nombre": "Tadó",
-          "Sitios": {
-            "01": "Bochoromá",
-            '02': "Tadosito",
-            '03': "Mumbú",
-          },
-        },
-        '03': {
-          "Nombre": "Nuquí",
-          "Sitios": {
-            "01": "Jovi",
-            '02': "Arusi",
-          },
-        },
-        '04': {
-          "Nombre": "Capurgana",
-          "Sitios": {
-            "01": "La Coquerita",
-            '02': "Playa Aguacate",
-            '03': "Cabo Tiburón",
-            "04": "La Miel",
-            "05": "Playa Soledad",
-          },
-        },
-        '05': {
-          "Nombre": "Triganá",
-        },
-        '06': {
-          "Nombre": "Sapzurro",
-          "Sitios": {
-            "01": "Bahía Sapzurro",
-          },
-        },
-        '07': {
-          "Nombre": "Bahía Solano",
-          "Sitios": {
-            "01": "El Valle",
-            '02': "Huina",
-            '03': "Mecana",
-          },
-        },
-      },
-    },
-    "02": {
-      "Nombre": "Antioquia",
-      "Municipios": {
-        '01': {
-          "Nombre": "Guatapé",
-        },
-        '02': {
-          "Nombre": "Medellín",
-        },
-        '03': {
-          "Nombre": "Santa Fe de Antioquia",
-        },
-      },
-    },
-    "03": {
-      "Nombre": "Cafeterero",
-    },
-    "04": {
-      "Nombre": "Caribe",
-      "Municipios": {
-        '01': {
-          "Nombre": "Santa Marta",
-        },
-        '02': {
-          "Nombre": "San Andrés",
-        },
-        '03': {
-          "Nombre": "Cartagena",
-        },
-      },
-    },
-    "05": {
-      "Nombre": "Urabá",
-    },
-  };
+  // Crea un diccionario vacío
+  Map<String, dynamic> turismoCollection = {};
 
   @override
   void dispose() {
@@ -119,6 +29,8 @@ class _HomePrincipalState extends State<HomePrincipal> {
   @override
   void initState() {
     super.initState();
+    // Llama a la función para cargar los datos de Firestore
+    mostrarNombresTurismoMunicipiosSitios();
     _focusNode.addListener(() {
       setState(() {
         // No es necesario realizar ninguna acción aquí
@@ -126,45 +38,121 @@ class _HomePrincipalState extends State<HomePrincipal> {
     });
   }
 
+  Future<void> mostrarNombresTurismoMunicipiosSitios() async {
+    // Accede a la colección "Turismo" en Firestore
+    CollectionReference turismoCollectionRef = FirebaseFirestore.instance.collection('Turismo');
+
+    // Obtén los documentos de la colección "Turismo"
+    QuerySnapshot turismoSnapshot = await turismoCollectionRef.get();
+
+    // Recorre cada documento en la colección "Turismo"
+    for (QueryDocumentSnapshot turismoDoc in turismoSnapshot.docs) {
+      // Obtén los datos del documento "Turismo"
+      Map<String, dynamic>? turismoData = turismoDoc.data() as Map<String, dynamic>?;
+
+      // Almacena los datos de "Turismo" en el diccionario
+      if (turismoData != null) {
+        turismoCollection[turismoDoc.id] = turismoData;
+
+        // Crea un diccionario para almacenar los municipios
+        Map<String, dynamic> municipiosDict = {};
+
+        // Accede a la subcolección "Municipios" del documento actual
+        CollectionReference municipiosRef = turismoDoc.reference.collection('Municipios');
+
+        // Obtén los documentos de la subcolección "Municipios"
+        QuerySnapshot municipiosSnapshot = await municipiosRef.get();
+
+        // Recorre cada documento en la subcolección "Municipios"
+        for (QueryDocumentSnapshot municipioDoc in municipiosSnapshot.docs) {
+          // Obtén los datos del documento "Municipios"
+          Map<String, dynamic>? municipioData = municipioDoc.data() as Map<String, dynamic>?;
+
+          // Almacena los datos de "Municipios" en el diccionario de municipios
+          if (municipioData != null) {
+            // Crea un diccionario para almacenar los sitios turísticos
+            Map<String, dynamic> sitiosDict = {};
+
+            // Accede a la subcolección "Sitios" del documento actual en "Municipios"
+            CollectionReference sitiosRef = municipioDoc.reference.collection('Sitios');
+
+            // Obtén los documentos de la subcolección "Sitios"
+            QuerySnapshot sitiosSnapshot = await sitiosRef.get();
+
+            // Recorre cada documento en la subcolección "Sitios"
+            for (QueryDocumentSnapshot sitioDoc in sitiosSnapshot.docs) {
+              // Obtén los datos del documento "Sitios"
+              Map<String, dynamic>? sitioData = sitioDoc.data() as Map<String, dynamic>?;
+
+              // Almacena los datos de "Sitios" en el diccionario de sitios
+              if (sitioData != null) {
+                sitiosDict[sitioDoc.id] = sitioData;
+              }
+            }
+
+            // Almacena el diccionario de sitios en el diccionario de municipios
+            municipioData['Sitios'] = sitiosDict;
+          }
+          // Almacena el diccionario de municipios en el diccionario de turismo
+          municipiosDict[municipioDoc.id] = municipioData;
+        }
+
+        // Almacena el diccionario de municipios en el diccionario de turismo
+        turismoCollection[turismoDoc.id]['Municipios'] = municipiosDict;
+      }
+    }
+  }
+
   // Función para buscar en el diccionario Turismo
-  List<Map<String, dynamic>> buscarEnTurismo(
-      Map<String, dynamic> turismo, String query) {
+  List<Map<String, dynamic>> buscarEnTurismo(Map<String, dynamic> turismoCollection, String query) {
     List<Map<String, dynamic>> resultados = [];
     // Itera sobre las regiones
-    turismo.forEach((idTurismo, region) {
-      String nombreRegion = region['Nombre'].toLowerCase();
-      // Verifica si el nombre de la región contiene la consulta
-      if (nombreRegion.contains(query.toLowerCase())) {
-        resultados.add({
-          'idTurismo': idTurismo,
-          'Nombre': region['Nombre'],
-        });
+    turismoCollection.forEach((idTurismo, region) {
+      // Verifica que la clave 'Nombre' esté presente y sea una cadena
+      if (region.containsKey('Nombre') && region['Nombre'] is String) {
+        String nombreRegion = region['Nombre'] as String;
+        // Verifica si el nombre de la región contiene la consulta
+        if (nombreRegion.toLowerCase().contains(query.toLowerCase())) {
+          resultados.add({
+            'idTurismo': idTurismo,
+            'Nombre': region['Nombre'],
+          });
+        }
       }
+
       // Si hay municipios, busca en los municipios
       if (region.containsKey('Municipios')) {
         Map<String, dynamic> municipios = region['Municipios'] as Map<String, dynamic>;
         municipios.forEach((idMunicipio, municipio) {
-          String nombreMunicipio = municipio['Nombre'].toLowerCase();
-          // Verifica si el nombre del municipio contiene la consulta
-          if (nombreMunicipio.contains(query.toLowerCase())) {
-            resultados.add({
-              'idTurismo': idTurismo,
-              'idMunicipio': idMunicipio,
-              'Nombre': municipio['Nombre'],
-            });
+          // Verifica que la clave 'Nombre' esté presente y sea una cadena
+          if (municipio.containsKey('Nombre') && municipio['Nombre'] is String) {
+            String nombreMunicipio = municipio['Nombre'] as String;
+            // Verifica si el nombre del municipio contiene la consulta
+            if (nombreMunicipio.toLowerCase().contains(query.toLowerCase())) {
+              resultados.add({
+                'idTurismo': idTurismo,
+                'idMunicipio': idMunicipio,
+                'Nombre': municipio['Nombre'],
+              });
+            }
           }
+
           // Si hay sitios turísticos, busca en los sitios turísticos
           if (municipio.containsKey('Sitios')) {
             Map<String, dynamic> sitios = municipio['Sitios'] as Map<String, dynamic>;
-            sitios.forEach((idSitio, nombreSitio) {
-              // Verifica si el nombre del sitio turístico contiene la consulta
-              if (nombreSitio.toLowerCase().contains(query.toLowerCase())) {
-                resultados.add({
-                  'idTurismo': idTurismo,
-                  'idMunicipio': idMunicipio,
-                  'idSitio': idSitio,
-                  'Nombre': nombreSitio,
-                });
+            sitios.forEach((idSitio, datosSitio) {
+              // Verifica que la clave 'Nombre' esté presente y sea una cadena
+              if (datosSitio.containsKey('Nombre') && datosSitio['Nombre'] is String) {
+                String nombreSitio = datosSitio['Nombre'] as String;
+                // Verifica si el nombre del sitio contiene la consulta
+                if (nombreSitio.toLowerCase().contains(query.toLowerCase())) {
+                  resultados.add({
+                    'idTurismo': idTurismo,
+                    'idMunicipio': idMunicipio,
+                    'idSitio': idSitio,
+                    'Nombre': nombreSitio,
+                  });
+                }
               }
             });
           }
@@ -257,10 +245,11 @@ class _HomePrincipalState extends State<HomePrincipal> {
                                 contentPadding: const EdgeInsets.symmetric(
                                     vertical: 9, horizontal: 10),
                               ),
+                              // Llama a la función buscarEnTurismo con el diccionario Turismo y la consulta ingresada por el usuario
                               onChanged: (query) {
-                                // Llama a la función buscarEnTurismo
-                                // con el diccionario Turismo y la consulta ingresada por el usuario
-                                List<Map<String, dynamic>> newResult = buscarEnTurismo(Turismo, query);
+                                // Realiza la búsqueda
+                                List<Map<String, dynamic>> newResult = buscarEnTurismo(turismoCollection, query);
+
                                 // Actualiza el estado de resultados con los resultados de la búsqueda
                                 setState(() {
                                   resultados = newResult;
@@ -268,6 +257,7 @@ class _HomePrincipalState extends State<HomePrincipal> {
                               },
                             ),
                             const SizedBox(height: 10),
+                            // Widget Visibility
                             Visibility(
                               visible: _textEditingController.text.isNotEmpty,
                               child: Expanded(
@@ -279,21 +269,24 @@ class _HomePrincipalState extends State<HomePrincipal> {
                                     itemCount: resultados.length,
                                     itemBuilder: (context, index) {
                                       final resultado = resultados[index];
+                                      // Verifica que la clave 'Nombre' esté presente
+                                      final nombre = resultado['Nombre'] != null ? resultado['Nombre'] : 'Sin nombre';
+
                                       return ListTile(
                                         title: Row(
                                           children: [
                                             const Icon(Icons.location_on_outlined),
                                             const SizedBox(width: 15),
-                                            Text(resultado["Nombre"] ?? ""),
+                                            Text(nombre),
                                           ],
                                         ),
                                         onTap: () {
-                                          // Obtén los IDs de turismo y municipio del resultado
+                                          // Obtén los IDs de turismo, municipio y sitio
                                           final idTurismo = resultado['idTurismo'];
                                           final idMunicipio = resultado['idMunicipio'];
                                           final idSitio = resultado['idSitio'];
 
-                                          // Navega a la página correspondiente según los IDs
+                                          // Verifica la navegación según los IDs
                                           if (idSitio != null) {
                                             Navigator.push(
                                               context,
