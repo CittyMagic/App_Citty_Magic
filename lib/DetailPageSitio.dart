@@ -71,7 +71,7 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
           textAlign: TextAlign.left, // Alinea explícitamente el texto a la izquierda
           style: const TextStyle(
             fontSize: 18,
-            fontFamily: "Bold", // Suponiendo que tienes una fuente llamada "Bold"
+            fontFamily: "semibold", // Suponiendo que tienes una fuente llamada "Bold"
             color: Color.fromRGBO(0, 0, 0, 1), // Color negro
           ),
         ),
@@ -112,43 +112,7 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
     }
   }
 
-// Lista con viñetas
-  Widget Lista(String campo) {
-    if (widget.sitio[campo] != null) {
-      return Container(
-        padding: const EdgeInsets.only(left: 20, right: 20),
-        child: RichText(
-          textAlign: TextAlign.justify,
-          text: TextSpan(
-            children: [
-              const WidgetSpan(
-                child: Padding(
-                  padding: EdgeInsets.only(left: 10.0),
-                  // Indentación de la viñeta
-                  child: Text(
-                    "\u2022 ",
-                    // Símbolo de viñeta (puedes usar otros como "•" o "◦")
-                    style: TextStyle(fontSize: 16,
-                        color: Color.fromRGBO(129, 135, 153, 1)),
-                  ),
-                ),
-              ),
-              TextSpan(
-                text: widget.sitio[campo],
-                style: const TextStyle(
-                  fontFamily: "Regular",
-                  fontSize: 15,
-                  color: Color.fromRGBO(129, 135, 153, 1),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    }else {
-      return const SizedBox.shrink();
-    }
-  }
+
 
 // Carrusel de imagenes
   Future<Widget> carrusel(String campo) async {
@@ -255,47 +219,60 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
             parrafo("DescripcionP1"),
             espacio("DescripcionP1"),
             FutureBuilder<Widget>(
-              future: carrusel("Imagenes"),
-              // Pasa el nombre del campo como argumento
+              future: carrusel("ImagenesP"),
+
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return snapshot.data!; // Muestra el widget del carrusel
+                  return snapshot.data!;
                 } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}'); // Maneja errores
+                  return Text('Error: ${snapshot.error}');
                 } else {
                   return CircularProgressIndicator();
                 }
               },
             ),
-            espacio("Imagenes"), //Cambiar a ImagenesP
-
-            Lista("List1"),
-            Lista("List2"),
-            Lista("List3"),
-            Lista("List4"),
-            Lista("List5"),
-            Lista("List6"),
-            Lista("List7"),
-            Lista("List8"),
-            Lista("List9"),
-            Lista("List10"),
-
-            espacio("SubSecundario"),
-            subIzq("SubSecundario"),
+            espacio("ImagenesP"),
+            espacio("SubP2"),
+            subIzq("SubP2"),
             parrafo("DescripcionP2"),
             espacio("DescripcionP2"),
+
+            subIzq("SubP3"),
+            parrafo("DescripcionP3"),
+            espacio("DescripcionP3"),
+
+            subIzq("SubP4"),
+            parrafo("DescripcionP4"),
+            espacio("DescripcionP4"),
+
+            subIzq("SubP5"),
+            parrafo("DescripcionP5"),
+            espacio("DescripcionP5"),
+
+            subIzq("SubP6"),
+            parrafo("DescripcionP6"),
+            espacio("DescripcionP6"),
+
+            subIzq("SubP7"),
+            parrafo("DescripcionP7"),
+            espacio("DescripcionP7"),
+
+            subIzq("SubP8"),
+            parrafo("DescripcionP8"),
+            espacio("DescripcionP8"),
 
             espacio("Subtitulo1"),
             subtitulo("Subtitulo1"),
             diviSub("Subtitulo1"),
+            espacio("Subtitulo1"),
             FutureBuilder<Widget>(
               future: carrusel("Imagenes1"),
               // Pasa el nombre del campo como argumento
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return snapshot.data!; // Muestra el widget del carrusel
+                  return snapshot.data!;
                 } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}'); // Maneja errores
+                  return Text('Error: ${snapshot.error}');
                 } else {
                   return CircularProgressIndicator();
                 }
@@ -305,14 +282,21 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
             parrafo("Descripcion1"),
             espacio("Descripcion1"),
 
-            if (widget.sitio["Imagen"] != null)
-              Image.network(
-                widget.sitio["Imagen"], //cambiar nombre
-                fit: BoxFit.cover,
-                height: 300,
-                width: double.infinity,
-              ),
-            espacio("Imagen"),
+            FutureBuilder<Widget>(
+              future: carrusel("Imagenes1b"),
+              // Pasa el nombre del campo como argumento
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return snapshot.data!;
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  return CircularProgressIndicator();
+                }
+              },
+            ),
+            espacio("Imagenes1b"),
+
             parrafo("Descripcion1b"),
             espacio("Descripcion1b"),
 
@@ -320,14 +304,15 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
             espacio("Subtitulo2"),
             subtitulo("Subtitulo2"),
             diviSub("Subtitulo2"),
+            espacio("Subtitulo2"),
             FutureBuilder<Widget>(
               future: carrusel("Imagenes2"),
-              // Pasa el nombre del campo como argumento
+
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return snapshot.data!; // Muestra el widget del carrusel
+                  return snapshot.data!;
                 } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}'); // Maneja errores
+                  return Text('Error: ${snapshot.error}');
                 } else {
                   return CircularProgressIndicator();
                 }
@@ -341,14 +326,15 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
             espacio("Subtitulo3"),
             subtitulo("Subtitulo3"),
             diviSub("Subtitulo3"),
+            espacio("Subtitulo3"),
             FutureBuilder<Widget>(
               future: carrusel("Imagenes3"),
-              // Pasa el nombre del campo como argumento
+
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return snapshot.data!; // Muestra el widget del carrusel
+                  return snapshot.data!;
                 } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}'); // Maneja errores
+                  return Text('Error: ${snapshot.error}');
                 } else {
                   return CircularProgressIndicator();
                 }
@@ -362,14 +348,15 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
             espacio("Subtitulo4"),
             subtitulo("Subtitulo4"),
             diviSub("Subtitulo4"),
+            espacio("Subtitulo4"),
             FutureBuilder<Widget>(
               future: carrusel("Imagenes4"),
-              // Pasa el nombre del campo como argumento
+
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return snapshot.data!; // Muestra el widget del carrusel
+                  return snapshot.data!;
                 } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}'); // Maneja errores
+                  return Text('Error: ${snapshot.error}');
                 } else {
                   return CircularProgressIndicator();
                 }
@@ -383,14 +370,15 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
             espacio("Subtitulo5"),
             subtitulo("Subtitulo5"),
             diviSub("Subtitulo5"),
+            espacio("Subtitulo5"),
             FutureBuilder<Widget>(
               future: carrusel("Imagenes5"),
-              // Pasa el nombre del campo como argumento
+
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return snapshot.data!; // Muestra el widget del carrusel
+                  return snapshot.data!;
                 } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}'); // Maneja errores
+                  return Text('Error: ${snapshot.error}');
                 } else {
                   return CircularProgressIndicator();
                 }
@@ -404,14 +392,15 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
             espacio("Subtitulo6"),
             subtitulo("Subtitulo6"),
             diviSub("Subtitulo6"),
+            espacio("Subtitulo6"),
             FutureBuilder<Widget>(
               future: carrusel("Imagenes6"),
-              // Pasa el nombre del campo como argumento
+
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return snapshot.data!; // Muestra el widget del carrusel
+                  return snapshot.data!;
                 } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}'); // Maneja errores
+                  return Text('Error: ${snapshot.error}');
                 } else {
                   return CircularProgressIndicator();
                 }
@@ -425,14 +414,15 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
             espacio("Subtitulo7"),
             subtitulo("Subtitulo7"),
             diviSub("Subtitulo7"),
+            espacio("Subtitulo7"),
             FutureBuilder<Widget>(
               future: carrusel("Imagenes7"),
-              // Pasa el nombre del campo como argumento
+
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return snapshot.data!; // Muestra el widget del carrusel
+                  return snapshot.data!;
                 } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}'); // Maneja errores
+                  return Text('Error: ${snapshot.error}');
                 } else {
                   return CircularProgressIndicator();
                 }
@@ -446,14 +436,15 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
             espacio("Subtitulo8"),
             subtitulo("Subtitulo8"),
             diviSub("Subtitulo8"),
+            espacio("Subtitulo8"),
             FutureBuilder<Widget>(
               future: carrusel("Imagenes8"),
-              // Pasa el nombre del campo como argumento
+
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return snapshot.data!; // Muestra el widget del carrusel
+                  return snapshot.data!;
                 } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}'); // Maneja errores
+                  return Text('Error: ${snapshot.error}');
                 } else {
                   return CircularProgressIndicator();
                 }
@@ -467,14 +458,15 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
             espacio("Subtitulo9"),
             subtitulo("Subtitulo9"),
             diviSub("Subtitulo9"),
+            espacio("Subtitulo9"),
             FutureBuilder<Widget>(
               future: carrusel("Imagenes9"),
-              // Pasa el nombre del campo como argumento
+
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return snapshot.data!; // Muestra el widget del carrusel
+                  return snapshot.data!;
                 } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}'); // Maneja errores
+                  return Text('Error: ${snapshot.error}');
                 } else {
                   return CircularProgressIndicator();
                 }
@@ -488,14 +480,15 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
             espacio("Subtitulo10"),
             subtitulo("Subtitulo10"),
             diviSub("Subtitulo10"),
+            espacio("Subtitulo10"),
             FutureBuilder<Widget>(
               future: carrusel("Imagenes10"),
-              // Pasa el nombre del campo como argumento
+
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return snapshot.data!; // Muestra el widget del carrusel
+                  return snapshot.data!;
                 } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}'); // Maneja errores
+                  return Text('Error: ${snapshot.error}');
                 } else {
                   return CircularProgressIndicator();
                 }
