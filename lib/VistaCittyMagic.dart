@@ -51,7 +51,8 @@ class _VistaCityMagicState extends State<VistaCityMagic> {
         // Verificar si el nombre del municipio contiene la consulta
         if (municipioData.containsKey("Nombre") &&
             municipioData["Nombre"] != null &&
-            removeDiacritics(municipioData["Nombre"].toLowerCase()).contains(formattedQuery)) {
+            removeDiacritics(municipioData["Nombre"].toLowerCase())
+                .contains(formattedQuery)) {
           allResults.add({
             "Nombre":
                 municipioData["Nombre"], // Agregar el nombre del municipio
@@ -74,14 +75,15 @@ class _VistaCityMagicState extends State<VistaCityMagic> {
           // Verificar si el nombre o la clave del sitio contiene la consulta
           if ((sitioData.containsKey("Nombre") &&
               sitioData["Nombre"] != null &&
-              removeDiacritics(sitioData["Nombre"].toLowerCase()).contains(formattedQuery))) {
+              removeDiacritics(sitioData["Nombre"].toLowerCase())
+                  .contains(formattedQuery))) {
             sitioData["idSitio"] = sitioDoc.id;
             sitioData["idMunicipio"] = municipioDoc.id;
             sitioData["idTurismo"] = turismoDoc.id;
             allResults.add(sitioData);
           }
         }
-      /*
+        /*
         final comidaSnapshot = await municipioDoc.reference
             .collection("Comida")
             .where("Nombre")
@@ -192,11 +194,10 @@ class _VistaCityMagicState extends State<VistaCityMagic> {
     _textEditingController = TextEditingController();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
+        home: Scaffold(
           extendBodyBehindAppBar: true,
           appBar: AppBar(
             backgroundColor: Colors.transparent,
@@ -340,7 +341,8 @@ class _VistaCityMagicState extends State<VistaCityMagic> {
                                                     MaterialPageRoute(
                                                       builder: (context) =>
                                                           DetailPageSitios(
-                                                        sitio: searchResults[index],
+                                                        sitio:
+                                                            searchResults[index],
                                                         IdDepartamento: idTurismo,
                                                         IdMunicipio: idMunicipio,
                                                       ),
@@ -417,7 +419,7 @@ class _VistaCityMagicState extends State<VistaCityMagic> {
               ],
             ),
           ),
-      ),
+        ),
     );
   }
 }

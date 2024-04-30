@@ -1,4 +1,5 @@
 import 'package:cittyquibdo/Bottom_Nav.dart';
+import 'package:cittyquibdo/HomePrincipal.dart';
 import 'package:cittyquibdo/Routes.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +27,7 @@ class _HomePageState extends State<HomePage> {
                     builder: (context) => Routes(index: index),
                   );
                 default:
-                  return MaterialPageRoute(builder: (context) => Container());
+                  return MaterialPageRoute(builder: (context) => const HomePrincipal());
               }
             },
           ),

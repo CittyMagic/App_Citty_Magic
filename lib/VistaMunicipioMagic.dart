@@ -924,8 +924,7 @@ class _VistaMunicipioMagicState extends State<VistaMunicipioMagic> {
                           .collection("Municipios")
                           .doc(widget.idMunicipio)
                           .snapshots(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<DocumentSnapshot> snapshot) {
+                      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
                         if (snapshot.hasError) {
                           return Center(
                             child: Text("Error: ${snapshot.error}"),
@@ -934,11 +933,26 @@ class _VistaMunicipioMagicState extends State<VistaMunicipioMagic> {
                         if (!snapshot.hasData || !snapshot.data!.exists) {
                           return const SizedBox(height: 0); // No hay datos
                         }
-                        final municipioData =
-                        snapshot.data!.data() as Map<String, dynamic>;
-                       /* final mapaGeoPoint = municipioData["Mapa"] as GeoPoint;
-                        final mapa = LatLng(mapaGeoPoint.latitude, mapaGeoPoint.longitude);*/
+                        final municipioData = snapshot.data!.data() as Map<String, dynamic>;
+                        final mapaGeoPoint = municipioData["Mapa"] as GeoPoint;
+                        final mapa = LatLng(mapaGeoPoint.latitude, mapaGeoPoint.longitude);
                         final ubicacion = municipioData["Ubicacion"];
+
+                        // Crea un conjunto de marcadores
+                        Set<Marker> _markers = {};
+
+                        // Crear un marcador en la ubicación deseada
+                        final marker = Marker(
+                          markerId: MarkerId('ubicacion'),
+                          position: mapa,
+                          infoWindow: InfoWindow(
+                            title: ubicacion,
+                          ),
+                          icon: BitmapDescriptor.defaultMarker, // Establece el icono del marcador (opcional)
+                        );
+
+                        // Agrega el marcador al conjunto de marcadores
+                        _markers.add(marker);
 
                         return Column(
                           children: [
@@ -975,10 +989,11 @@ class _VistaMunicipioMagicState extends State<VistaMunicipioMagic> {
                               height: 200,
                               child: GoogleMap(
                                 onMapCreated: _onMapCreated,
-                                initialCameraPosition: const CameraPosition(
-                                    target: LatLng(5.6934391,-76.6610421),
+                                initialCameraPosition: CameraPosition(
+                                  target: mapa,
                                   zoom: 13.0,
                                 ),
+                                markers: _markers, // Vincula el conjunto de marcadores al mapa
                               ),
                             )
                           ],
