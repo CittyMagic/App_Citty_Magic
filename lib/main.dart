@@ -14,23 +14,8 @@ void main() async {
   // Inicializar Firebase
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  // Configurar Firestore antes de iniciar la aplicación
-  configurarFirestore();
-
   // Iniciar la aplicación
   runApp(const MyPage());
-}
-
-// Función para configurar Firestore
-void configurarFirestore() {
-  // Configurar los ajustes de Firestore
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-  // Establecer el tamaño del caché a 10 MB y habilitar la persistencia offline
-  firestore.settings = firestore.settings.copyWith(
-    cacheSizeBytes: 10 * 1024 * 1024, // 10 MB
-    persistenceEnabled: true,
-  );
 }
 
 class MyPage extends StatefulWidget {

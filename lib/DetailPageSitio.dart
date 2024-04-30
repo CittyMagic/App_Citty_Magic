@@ -48,6 +48,7 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
         padding: const EdgeInsets.only(left: 10, right: 10),
         child: Text(
           widget.sitio[campo],
+          textAlign: TextAlign.center,
           style: const TextStyle(
             fontSize: 26,
             fontFamily: "Bold",
