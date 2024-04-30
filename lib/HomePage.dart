@@ -15,29 +15,31 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Navigator(
-          onGenerateRoute: (settings) {
-            switch (settings.name) {
-              case '/':
-                return MaterialPageRoute(
-                  builder: (context) => Routes(index: index),
-                );
-              default:
-                return MaterialPageRoute(builder: (context) => Container());
-            }
+    return MaterialApp(
+      home: Scaffold(
+        body: SafeArea(
+          child: Navigator(
+            onGenerateRoute: (settings) {
+              switch (settings.name) {
+                case '/':
+                  return MaterialPageRoute(
+                    builder: (context) => Routes(index: index),
+                  );
+                default:
+                  return MaterialPageRoute(builder: (context) => Container());
+              }
+            },
+          ),
+        ),
+        bottomNavigationBar: BNavigator(
+          currentIndex: (i) {
+            setState(
+              () {
+                index = i;
+              },
+            );
           },
         ),
-      ),
-      bottomNavigationBar: BNavigator(
-        currentIndex: (i) {
-          setState(
-            () {
-              index = i;
-            },
-          );
-        },
       ),
     );
   }

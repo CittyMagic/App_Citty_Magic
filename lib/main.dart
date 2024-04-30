@@ -1,4 +1,5 @@
 import 'package:cittyquibdo/Google_Sign_In.dart';
+import 'package:cittyquibdo/HomePrincipal.dart';
 import 'package:cittyquibdo/SplashPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,6 @@ void main() async {
   runApp(const MyPage());
 }
 
-// Función para configurar Firestore
 // Función para configurar Firestore
 void configurarFirestore() {
   // Configurar los ajustes de Firestore

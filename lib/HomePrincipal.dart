@@ -20,6 +20,8 @@ class _HomePrincipalState extends State<HomePrincipal> {
   // Crea un diccionario vacío
   Map<String, dynamic> turismoCollection = {};
 
+
+
   @override
   void dispose() {
     _textEditingController.dispose();
@@ -137,6 +139,7 @@ class _HomePrincipalState extends State<HomePrincipal> {
           }
 
           // Si hay sitios turísticos, busca en los sitios turísticos
+          // Si hay sitios turísticos, busca en los sitios turísticos
           if (municipio.containsKey('Sitios')) {
             Map<String, dynamic> sitios = municipio['Sitios'] as Map<String, dynamic>;
             sitios.forEach((idSitio, datosSitio) {
@@ -145,12 +148,16 @@ class _HomePrincipalState extends State<HomePrincipal> {
                 String nombreSitio = datosSitio['Nombre'] as String;
                 // Verifica si el nombre del sitio contiene la consulta
                 if (removeDiacritics(nombreSitio.toLowerCase()).contains(query.toLowerCase())) {
-                  resultados.add({
-                    'idTurismo': idTurismo,
-                    'idMunicipio': idMunicipio,
-                    'idSitio': idSitio,
-                    'Nombre': nombreSitio,
-                  });
+                  // Copia los datos del sitio turístico
+                  Map<String, dynamic> sitioData = Map.from(datosSitio);
+
+                  // Añadir los IDs a los datos del sitio
+                  sitioData['idSitio'] = idSitio;
+                  sitioData['idMunicipio'] = idMunicipio;
+                  sitioData['idTurismo'] = idTurismo;
+
+                  // Agregar el sitioData a la lista de resultados
+                  resultados.add(sitioData);
                 }
               }
             });
@@ -161,237 +168,239 @@ class _HomePrincipalState extends State<HomePrincipal> {
     return resultados;
   }
 
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        actions: [
-          Container(
-            padding: const EdgeInsets.only(right: 10),
-            child: const Image(
-              image: AssetImage("assets/Logo/logohome.png"),
-              width: 100,
-              height: 100,
-            ),
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
+    return MaterialApp(
+      home: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          actions: [
             Container(
-              width: MediaQuery.of(context).size.width,
-              height: 400,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/banner-citty1.jpg"),
-                  fit: BoxFit.cover,
-                ),
+              padding: const EdgeInsets.only(right: 10),
+              child: const Image(
+                image: AssetImage("assets/Logo/logohome.png"),
+                width: 100,
+                height: 100,
               ),
-              child: Scaffold(
-                backgroundColor: Colors.black54,
-                body: Center(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 120),
-                      const Text(
-                        "Descubre Colombia",
-                        style: TextStyle(
-                          fontSize: 30,
-                          color: Colors.white,
-                          fontFamily: 'ExtraBold',
+            ),
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: 400,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("assets/banner-citty1.jpg"),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                child: Scaffold(
+                  backgroundColor: Colors.black54,
+                  body: Center(
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 120),
+                        const Text(
+                          "Descubre Colombia",
+                          style: TextStyle(
+                            fontSize: 30,
+                            color: Colors.white,
+                            fontFamily: 'ExtraBold',
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 16),
-                      Container(
-                        color: Colors.transparent,
-                        height: 200,
-                        width: 325,
-                        child: Column(
-                          children: [
-                            TextFormField(
-                              controller: _textEditingController,
-                              focusNode: _focusNode,
-                              textAlign: TextAlign.left,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontFamily: 'Regular',
-                              ),
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white70,
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(50),
-                                  borderSide: BorderSide.none,
-                                ),
-                                prefixIcon: const Icon(
-                                  Icons.search,
+                        const SizedBox(height: 16),
+                        Container(
+                          color: Colors.transparent,
+                          height: 200,
+                          width: 325,
+                          child: Column(
+                            children: [
+                              TextFormField(
+                                controller: _textEditingController,
+                                focusNode: _focusNode,
+                                textAlign: TextAlign.left,
+                                style: const TextStyle(
                                   color: Colors.black,
-                                  size: 25,
-                                ),
-                                hintText: !_focusNode.hasFocus &&
-                                    _textEditingController.text.isEmpty
-                                    ? "Ej: Quibdó, Guatapé, Medellín"
-                                    : null,
-                                hintStyle: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
+                                  fontSize: 20,
                                   fontFamily: 'Regular',
                                 ),
-                                contentPadding: const EdgeInsets.symmetric(
-                                    vertical: 9, horizontal: 10),
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: Colors.white70,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(50),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                  prefixIcon: const Icon(
+                                    Icons.search,
+                                    color: Colors.black,
+                                    size: 25,
+                                  ),
+                                  hintText: !_focusNode.hasFocus &&
+                                      _textEditingController.text.isEmpty
+                                      ? "Ej: Quibdó, Guatapé, Medellín"
+                                      : null,
+                                  hintStyle: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                    fontFamily: 'Regular',
+                                  ),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 9, horizontal: 10),
+                                ),
+                                // Llama a la función buscarEnTurismo con el diccionario Turismo y la consulta ingresada por el usuario
+                                onChanged: (query) {
+                                  // Realiza la búsqueda
+                                  List<Map<String, dynamic>> newResult = buscarEnTurismo(turismoCollection, query);
+
+                                  // Actualiza el estado de resultados con los resultados de la búsqueda
+                                  setState(() {
+                                    resultados = newResult;
+                                  });
+                                },
                               ),
-                              // Llama a la función buscarEnTurismo con el diccionario Turismo y la consulta ingresada por el usuario
-                              onChanged: (query) {
-                                // Realiza la búsqueda
-                                List<Map<String, dynamic>> newResult = buscarEnTurismo(turismoCollection, query);
+                              const SizedBox(height: 10),
+                              // Widget Visibility
+                              Visibility(
+                                visible: _textEditingController.text.isNotEmpty,
+                                child: Expanded(
+                                  child: Container(
+                                    color: Colors.white70,
+                                    width: 325,
+                                    child: ListView.builder(
+                                      padding: EdgeInsets.zero,
+                                      itemCount: resultados.length,
+                                      itemBuilder: (context, index) {
+                                        final resultado = resultados[index];
+                                        // Verifica que la clave 'Nombre' esté presente
+                                        final nombre = resultado['Nombre'] != null ? resultado['Nombre'] : 'Sin nombre';
 
-                                // Actualiza el estado de resultados con los resultados de la búsqueda
-                                setState(() {
-                                  resultados = newResult;
-                                });
-                              },
-                            ),
-                            const SizedBox(height: 10),
-                            // Widget Visibility
-                            Visibility(
-                              visible: _textEditingController.text.isNotEmpty,
-                              child: Expanded(
-                                child: Container(
-                                  color: Colors.white70,
-                                  width: 325,
-                                  child: ListView.builder(
-                                    padding: EdgeInsets.zero,
-                                    itemCount: resultados.length,
-                                    itemBuilder: (context, index) {
-                                      final resultado = resultados[index];
-                                      // Verifica que la clave 'Nombre' esté presente
-                                      final nombre = resultado['Nombre'] != null ? resultado['Nombre'] : 'Sin nombre';
+                                        return ListTile(
+                                          title: Row(
+                                            children: [
+                                              const Icon(Icons.location_on_outlined),
+                                              const SizedBox(width: 15),
+                                              Text(nombre),
+                                            ],
+                                          ),
+                                          onTap: () {
+                                            // Obtén los IDs de turismo, municipio y sitio
+                                            final idTurismo = resultado['idTurismo'];
+                                            final idMunicipio = resultado['idMunicipio'];
+                                            final idSitio = resultado['idSitio'];
 
-                                      return ListTile(
-                                        title: Row(
-                                          children: [
-                                            const Icon(Icons.location_on_outlined),
-                                            const SizedBox(width: 15),
-                                            Text(nombre),
-                                          ],
-                                        ),
-                                        onTap: () {
-                                          // Obtén los IDs de turismo, municipio y sitio
-                                          final idTurismo = resultado['idTurismo'];
-                                          final idMunicipio = resultado['idMunicipio'];
-                                          final idSitio = resultado['idSitio'];
-
-                                          // Verifica la navegación según los IDs
-                                          if (idSitio != null) {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    DetailPageSitios(
-                                                      sitio: resultado,
-                                                      IdDepartamento: idTurismo,
-                                                      IdMunicipio: idMunicipio,
-                                                    ),
-                                              ),
-                                            );
-                                            print(resultado);
-                                          } else if (idMunicipio != null) {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    VistaMunicipioMagic(
-                                                      idMunicipio: idMunicipio,
-                                                      idDepartamento: idTurismo,
-                                                    ),
-                                              ),
-                                            );
-                                          } else {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    VistaCityMagic(
-                                                      idDepartamento: idTurismo,
-                                                    ),
-                                              ),
-                                            );
-                                          }
-                                        },
-                                      );
-                                    },
+                                            // Verifica la navegación según los IDs
+                                            if (idSitio != null) {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      DetailPageSitios(
+                                                        sitio: resultado,
+                                                        IdDepartamento: idTurismo,
+                                                        IdMunicipio: idMunicipio,
+                                                      ),
+                                                ),
+                                              );
+                                            } else if (idMunicipio != null) {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      VistaMunicipioMagic(
+                                                        idMunicipio: idMunicipio,
+                                                        idDepartamento: idTurismo,
+                                                      ),
+                                                ),
+                                              );
+                                            } else {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      VistaCityMagic(
+                                                        idDepartamento: idTurismo,
+                                                      ),
+                                                ),
+                                              );
+                                            }
+                                          },
+                                        );
+                                      },
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 5),
-            StreamBuilder(
-              stream:
-              FirebaseFirestore.instance.collection("Turismo").snapshots(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.hasError) {
-                  return Text("Error: ${snapshot.error}");
-                }
-                // Verificación de nulos y longitud de documentos
-                if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
-                  return const Text("No hay datos disponibles");
-                }
-                // Calcular la altura basada en la cantidad de documentos
-                double containerHeight = snapshot.data!.docs.length * 155.0;
-                return SizedBox(
-                  height: containerHeight,
-                  width: MediaQuery.of(context).size.width,
-                  child: ListView(
-                    physics: const NeverScrollableScrollPhysics(),
-                    padding: EdgeInsets.zero,
-                    children: snapshot.data!.docs.map(
-                          (DocumentSnapshot departamentos) {
-                        Map<String, dynamic> departamento =
-                        departamentos.data() as Map<String, dynamic>;
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    VistaCityMagic(idDepartamento: departamentos.id),
-                              ),
-                            );
-                          },
-                          child: Card(
-                            margin: const EdgeInsets.only(bottom: 5),
-                            child: Column(
-                              children: [
-                                Image.network(
-                                  departamento["ImagenUrl"],
-                                  fit: BoxFit.cover,
-                                  height: 150,
-                                  width: double.infinity,
+              const SizedBox(height: 5),
+              StreamBuilder(
+                stream:
+                FirebaseFirestore.instance.collection("Turismo").snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    return Text("Error: ${snapshot.error}");
+                  }
+                  // Verificación de nulos y longitud de documentos
+                  if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
+                    return const Text("No hay datos disponibles");
+                  }
+                  // Calcular la altura basada en la cantidad de documentos
+                  double containerHeight = snapshot.data!.docs.length * 155.0;
+                  return SizedBox(
+                    height: containerHeight,
+                    width: MediaQuery.of(context).size.width,
+                    child: ListView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      padding: EdgeInsets.zero,
+                      children: snapshot.data!.docs.map(
+                            (DocumentSnapshot departamentos) {
+                          Map<String, dynamic> departamento =
+                          departamentos.data() as Map<String, dynamic>;
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      VistaCityMagic(idDepartamento: departamentos.id),
                                 ),
-                              ],
+                              );
+                            },
+                            child: Card(
+                              margin: const EdgeInsets.only(bottom: 5),
+                              child: Column(
+                                children: [
+                                  Image.network(
+                                    departamento["ImagenUrl"],
+                                    fit: BoxFit.cover,
+                                    height: 150,
+                                    width: double.infinity,
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                    ).toList(),
-                  ),
-                );
-              },
-            ),
-          ],
+                          );
+                        },
+                      ).toList(),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

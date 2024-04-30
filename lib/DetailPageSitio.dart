@@ -158,363 +158,365 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          color: Colors.white,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        actions: [
-          Container(
-            padding: const EdgeInsets.only(right: 10),
-            child: const Image(
-              image: AssetImage("assets/Logo/logohome.png"),
-              width: 100,
-              height: 100,
-            ),
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            color: Colors.white,
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: 270,
-              child: YoutubePlayer(
-                controller: YoutubePlayerController(
-                  initialVideoId: widget.sitio["IdVideo"],
-                  flags: const YoutubePlayerFlags(
-                    autoPlay: false,
-                    mute: false,
-                  ),
-                ),
-                showVideoProgressIndicator: true,
-                progressIndicatorColor: Colors.orange,
+          actions: [
+            Container(
+              padding: const EdgeInsets.only(right: 10),
+              child: const Image(
+                image: AssetImage("assets/Logo/logohome.png"),
+                width: 100,
+                height: 100,
               ),
             ),
-            const SizedBox(height: 30),
-            const Divider(
-              height: 0,
-              indent: 70,
-              endIndent: 70,
-              color: Color.fromRGBO(129, 135, 153, 1),
-              thickness: 5,
-            ),
-            const SizedBox(height: null),
-            Center(
-              child: Text(
-                widget.sitio["Nombre"],
-                style: const TextStyle(
-                  fontSize: 35,
-                  fontFamily: "ExtraBold",
-                  color: Color.fromRGBO(129, 135, 153, 1),
-                ),
-              ),
-            ),
-            parrafo("DescripcionP1"),
-            espacio("DescripcionP1"),
-            FutureBuilder<Widget>(
-              future: carrusel("ImagenesP"),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return snapshot.data!;
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  return CircularProgressIndicator();
-                }
-              },
-            ),
-            espacio("ImagenesP"),
-            espacio("SubP2"),
-            subIzq("SubP2"),
-            parrafo("DescripcionP2"),
-            espacio("DescripcionP2"),
-
-            subIzq("SubP3"),
-            parrafo("DescripcionP3"),
-            espacio("DescripcionP3"),
-
-            subIzq("SubP4"),
-            parrafo("DescripcionP4"),
-            espacio("DescripcionP4"),
-
-            subIzq("SubP5"),
-            parrafo("DescripcionP5"),
-            espacio("DescripcionP5"),
-
-            subIzq("SubP6"),
-            parrafo("DescripcionP6"),
-            espacio("DescripcionP6"),
-
-            subIzq("SubP7"),
-            parrafo("DescripcionP7"),
-            espacio("DescripcionP7"),
-
-            subIzq("SubP8"),
-            parrafo("DescripcionP8"),
-            espacio("DescripcionP8"),
-
-            espacio("Subtitulo1"),
-            subtitulo("Subtitulo1"),
-            diviSub("Subtitulo1"),
-            espacio("Subtitulo1"),
-            FutureBuilder<Widget>(
-              future: carrusel("Imagenes1"),
-              // Pasa el nombre del campo como argumento
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return snapshot.data!;
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  return CircularProgressIndicator();
-                }
-              },
-            ),
-            espacio("Imagenes1"),
-            parrafo("Descripcion1"),
-            espacio("Descripcion1"),
-
-            FutureBuilder<Widget>(
-              future: carrusel("Imagenes1b"),
-              // Pasa el nombre del campo como argumento
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return snapshot.data!;
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  return CircularProgressIndicator();
-                }
-              },
-            ),
-            espacio("Imagenes1b"),
-
-            parrafo("Descripcion1b"),
-            espacio("Descripcion1b"),
-
-
-            espacio("Subtitulo2"),
-            subtitulo("Subtitulo2"),
-            diviSub("Subtitulo2"),
-            espacio("Subtitulo2"),
-            FutureBuilder<Widget>(
-              future: carrusel("Imagenes2"),
-
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return snapshot.data!;
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  return CircularProgressIndicator();
-                }
-              },
-            ),
-            espacio("Imagenes2"),
-            parrafo("Descripcion2"),
-            espacio("Descripcion2"),
-
-
-            espacio("Subtitulo3"),
-            subtitulo("Subtitulo3"),
-            diviSub("Subtitulo3"),
-            espacio("Subtitulo3"),
-            FutureBuilder<Widget>(
-              future: carrusel("Imagenes3"),
-
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return snapshot.data!;
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  return CircularProgressIndicator();
-                }
-              },
-            ),
-            espacio("Imagenes3"),
-            parrafo("Descripcion3"),
-            espacio("Descripcion3"),
-
-
-            espacio("Subtitulo4"),
-            subtitulo("Subtitulo4"),
-            diviSub("Subtitulo4"),
-            espacio("Subtitulo4"),
-            FutureBuilder<Widget>(
-              future: carrusel("Imagenes4"),
-
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return snapshot.data!;
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  return CircularProgressIndicator();
-                }
-              },
-            ),
-            espacio("Imagenes4"),
-            parrafo("Descripcion4"),
-            espacio("Descripcion4"),
-
-
-            espacio("Subtitulo5"),
-            subtitulo("Subtitulo5"),
-            diviSub("Subtitulo5"),
-            espacio("Subtitulo5"),
-            FutureBuilder<Widget>(
-              future: carrusel("Imagenes5"),
-
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return snapshot.data!;
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  return CircularProgressIndicator();
-                }
-              },
-            ),
-            espacio("Imagenes5"),
-            parrafo("Descripcion5"),
-            espacio("Descripcion5"),
-
-
-            espacio("Subtitulo6"),
-            subtitulo("Subtitulo6"),
-            diviSub("Subtitulo6"),
-            espacio("Subtitulo6"),
-            FutureBuilder<Widget>(
-              future: carrusel("Imagenes6"),
-
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return snapshot.data!;
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  return CircularProgressIndicator();
-                }
-              },
-            ),
-            espacio("Imagenes6"),
-            parrafo("Descripcion6"),
-            espacio("Descripcion6"),
-
-
-            espacio("Subtitulo7"),
-            subtitulo("Subtitulo7"),
-            diviSub("Subtitulo7"),
-            espacio("Subtitulo7"),
-            FutureBuilder<Widget>(
-              future: carrusel("Imagenes7"),
-
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return snapshot.data!;
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  return CircularProgressIndicator();
-                }
-              },
-            ),
-            espacio("Imagenes7"),
-            parrafo("Descripcion7"),
-            espacio("Descripcion7"),
-
-
-            espacio("Subtitulo8"),
-            subtitulo("Subtitulo8"),
-            diviSub("Subtitulo8"),
-            espacio("Subtitulo8"),
-            FutureBuilder<Widget>(
-              future: carrusel("Imagenes8"),
-
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return snapshot.data!;
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  return CircularProgressIndicator();
-                }
-              },
-            ),
-            espacio("Imagenes8"),
-            parrafo("Descripcion8"),
-            espacio("Descripcion8"),
-
-
-            espacio("Subtitulo9"),
-            subtitulo("Subtitulo9"),
-            diviSub("Subtitulo9"),
-            espacio("Subtitulo9"),
-            FutureBuilder<Widget>(
-              future: carrusel("Imagenes9"),
-
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return snapshot.data!;
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  return CircularProgressIndicator();
-                }
-              },
-            ),
-            espacio("Imagenes9"),
-            parrafo("Descripcion9"),
-            espacio("Descripcion9"),
-
-
-            espacio("Subtitulo10"),
-            subtitulo("Subtitulo10"),
-            diviSub("Subtitulo10"),
-            espacio("Subtitulo10"),
-            FutureBuilder<Widget>(
-              future: carrusel("Imagenes10"),
-
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return snapshot.data!;
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  return CircularProgressIndicator();
-                }
-              },
-            ),
-            espacio("Imagenes10"),
-            parrafo("Descripcion10"),
-            espacio("Descripcion10"),
-
-
-
-            if (widget.sitio["Mapa"] != null)
-              SizedBox(
-                height: 300,
-                width: MediaQuery.of(context).size.width,
-                child: GoogleMap(
-                  onMapCreated: _onMapCreated,
-                  initialCameraPosition: CameraPosition(
-                    target: LatLng(widget.sitio["Mapa"].latitude,
-                        widget.sitio["Mapa"].longitude),
-                    zoom: 14.0,
-                  ),
-                  myLocationEnabled: true,
-                ),
-              ),
-            const SizedBox(height: 10)
           ],
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 270,
+                child: YoutubePlayer(
+                  controller: YoutubePlayerController(
+                    initialVideoId: widget.sitio["IdVideo"],
+                    flags: const YoutubePlayerFlags(
+                      autoPlay: false,
+                      mute: false,
+                    ),
+                  ),
+                  showVideoProgressIndicator: true,
+                  progressIndicatorColor: Colors.orange,
+                ),
+              ),
+              const SizedBox(height: 30),
+              const Divider(
+                height: 0,
+                indent: 70,
+                endIndent: 70,
+                color: Color.fromRGBO(129, 135, 153, 1),
+                thickness: 5,
+              ),
+              const SizedBox(height: null),
+              Center(
+                child: Text(
+                  widget.sitio["Nombre"],
+                  style: const TextStyle(
+                    fontSize: 35,
+                    fontFamily: "ExtraBold",
+                    color: Color.fromRGBO(129, 135, 153, 1),
+                  ),
+                ),
+              ),
+              parrafo("DescripcionP1"),
+              espacio("DescripcionP1"),
+              FutureBuilder<Widget>(
+                future: carrusel("ImagenesP"),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return snapshot.data!;
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                },
+              ),
+              espacio("ImagenesP"),
+              espacio("SubP2"),
+              subIzq("SubP2"),
+              parrafo("DescripcionP2"),
+              espacio("DescripcionP2"),
+      
+              subIzq("SubP3"),
+              parrafo("DescripcionP3"),
+              espacio("DescripcionP3"),
+      
+              subIzq("SubP4"),
+              parrafo("DescripcionP4"),
+              espacio("DescripcionP4"),
+      
+              subIzq("SubP5"),
+              parrafo("DescripcionP5"),
+              espacio("DescripcionP5"),
+      
+              subIzq("SubP6"),
+              parrafo("DescripcionP6"),
+              espacio("DescripcionP6"),
+      
+              subIzq("SubP7"),
+              parrafo("DescripcionP7"),
+              espacio("DescripcionP7"),
+      
+              subIzq("SubP8"),
+              parrafo("DescripcionP8"),
+              espacio("DescripcionP8"),
+      
+              espacio("Subtitulo1"),
+              subtitulo("Subtitulo1"),
+              diviSub("Subtitulo1"),
+              espacio("Subtitulo1"),
+              FutureBuilder<Widget>(
+                future: carrusel("Imagenes1"),
+                // Pasa el nombre del campo como argumento
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return snapshot.data!;
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                },
+              ),
+              espacio("Imagenes1"),
+              parrafo("Descripcion1"),
+              espacio("Descripcion1"),
+      
+              FutureBuilder<Widget>(
+                future: carrusel("Imagenes1b"),
+                // Pasa el nombre del campo como argumento
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return snapshot.data!;
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                },
+              ),
+              espacio("Imagenes1b"),
+      
+              parrafo("Descripcion1b"),
+              espacio("Descripcion1b"),
+      
+      
+              espacio("Subtitulo2"),
+              subtitulo("Subtitulo2"),
+              diviSub("Subtitulo2"),
+              espacio("Subtitulo2"),
+              FutureBuilder<Widget>(
+                future: carrusel("Imagenes2"),
+      
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return snapshot.data!;
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                },
+              ),
+              espacio("Imagenes2"),
+              parrafo("Descripcion2"),
+              espacio("Descripcion2"),
+      
+      
+              espacio("Subtitulo3"),
+              subtitulo("Subtitulo3"),
+              diviSub("Subtitulo3"),
+              espacio("Subtitulo3"),
+              FutureBuilder<Widget>(
+                future: carrusel("Imagenes3"),
+      
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return snapshot.data!;
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                },
+              ),
+              espacio("Imagenes3"),
+              parrafo("Descripcion3"),
+              espacio("Descripcion3"),
+      
+      
+              espacio("Subtitulo4"),
+              subtitulo("Subtitulo4"),
+              diviSub("Subtitulo4"),
+              espacio("Subtitulo4"),
+              FutureBuilder<Widget>(
+                future: carrusel("Imagenes4"),
+      
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return snapshot.data!;
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                },
+              ),
+              espacio("Imagenes4"),
+              parrafo("Descripcion4"),
+              espacio("Descripcion4"),
+      
+      
+              espacio("Subtitulo5"),
+              subtitulo("Subtitulo5"),
+              diviSub("Subtitulo5"),
+              espacio("Subtitulo5"),
+              FutureBuilder<Widget>(
+                future: carrusel("Imagenes5"),
+      
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return snapshot.data!;
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                },
+              ),
+              espacio("Imagenes5"),
+              parrafo("Descripcion5"),
+              espacio("Descripcion5"),
+      
+      
+              espacio("Subtitulo6"),
+              subtitulo("Subtitulo6"),
+              diviSub("Subtitulo6"),
+              espacio("Subtitulo6"),
+              FutureBuilder<Widget>(
+                future: carrusel("Imagenes6"),
+      
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return snapshot.data!;
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                },
+              ),
+              espacio("Imagenes6"),
+              parrafo("Descripcion6"),
+              espacio("Descripcion6"),
+      
+      
+              espacio("Subtitulo7"),
+              subtitulo("Subtitulo7"),
+              diviSub("Subtitulo7"),
+              espacio("Subtitulo7"),
+              FutureBuilder<Widget>(
+                future: carrusel("Imagenes7"),
+      
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return snapshot.data!;
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                },
+              ),
+              espacio("Imagenes7"),
+              parrafo("Descripcion7"),
+              espacio("Descripcion7"),
+      
+      
+              espacio("Subtitulo8"),
+              subtitulo("Subtitulo8"),
+              diviSub("Subtitulo8"),
+              espacio("Subtitulo8"),
+              FutureBuilder<Widget>(
+                future: carrusel("Imagenes8"),
+      
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return snapshot.data!;
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                },
+              ),
+              espacio("Imagenes8"),
+              parrafo("Descripcion8"),
+              espacio("Descripcion8"),
+      
+      
+              espacio("Subtitulo9"),
+              subtitulo("Subtitulo9"),
+              diviSub("Subtitulo9"),
+              espacio("Subtitulo9"),
+              FutureBuilder<Widget>(
+                future: carrusel("Imagenes9"),
+      
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return snapshot.data!;
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                },
+              ),
+              espacio("Imagenes9"),
+              parrafo("Descripcion9"),
+              espacio("Descripcion9"),
+      
+      
+              espacio("Subtitulo10"),
+              subtitulo("Subtitulo10"),
+              diviSub("Subtitulo10"),
+              espacio("Subtitulo10"),
+              FutureBuilder<Widget>(
+                future: carrusel("Imagenes10"),
+      
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return snapshot.data!;
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                },
+              ),
+              espacio("Imagenes10"),
+              parrafo("Descripcion10"),
+              espacio("Descripcion10"),
+      
+      
+      
+              if (widget.sitio["Mapa"] != null)
+                SizedBox(
+                  height: 300,
+                  width: MediaQuery.of(context).size.width,
+                  child: GoogleMap(
+                    onMapCreated: _onMapCreated,
+                    initialCameraPosition: CameraPosition(
+                      target: LatLng(widget.sitio["Mapa"].latitude,
+                          widget.sitio["Mapa"].longitude),
+                      zoom: 14.0,
+                    ),
+                    myLocationEnabled: true,
+                  ),
+                ),
+              const SizedBox(height: 10)
+            ],
+          ),
         ),
       ),
     );

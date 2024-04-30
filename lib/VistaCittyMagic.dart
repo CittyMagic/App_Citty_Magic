@@ -192,229 +192,232 @@ class _VistaCityMagicState extends State<VistaCityMagic> {
     _textEditingController = TextEditingController();
   }
 
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            color: Colors.white,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          title: Container(
-            color: Colors.transparent,
-            child: SizedBox(
-              width: 150,
-              child: TextFormField(
-                controller: _textEditingController,
-                style: const TextStyle(
-                  color: Colors.white,
-                ),
-                cursorColor: Colors.white,
-                decoration: const InputDecoration(
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color.fromRGBO(255, 109, 0, 1),
-                      width: 3,
-                    ),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color.fromRGBO(255, 109, 0, 1),
-                      width: 3,
-                    ),
-                  ),
-                  prefixIcon: Icon(
-                    Icons.search,
+    return MaterialApp(
+      home: Scaffold(
+          extendBodyBehindAppBar: true,
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              color: Colors.white,
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            title: Container(
+              color: Colors.transparent,
+              child: SizedBox(
+                width: 150,
+                child: TextFormField(
+                  controller: _textEditingController,
+                  style: const TextStyle(
                     color: Colors.white,
                   ),
+                  cursorColor: Colors.white,
+                  decoration: const InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color.fromRGBO(255, 109, 0, 1),
+                        width: 3,
+                      ),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color.fromRGBO(255, 109, 0, 1),
+                        width: 3,
+                      ),
+                    ),
+                    prefixIcon: Icon(
+                      Icons.search,
+                      color: Colors.white,
+                    ),
+                  ),
+                  onChanged: (query) {
+                    setState(() {});
+                    searchInFirebase(query, widget.idDepartamento);
+                  },
                 ),
-                onChanged: (query) {
-                  setState(() {});
-                  searchInFirebase(query, widget.idDepartamento);
-                },
               ),
             ),
-          ),
-          actions: [
-            Container(
-              margin: const EdgeInsets.only(right: 20),
-              child: const Image(
-                image: AssetImage("assets/Logo/Logo_Blanco.png"),
-                width: 100,
-                height: 75,
-              ),
-            ),
-          ],
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection("Turismo")
-                    .doc(widget.idDepartamento)
-                    .collection("Municipios")
-                    .snapshots(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.hasError) {
-                    return Text("Error: ${snapshot.error}");
-                  }
-                  // Manejo de datos nulos
-                  if (!snapshot.hasData) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  // Obtener la lista de documentos de municipios
-                  List<DocumentSnapshot> municipios = snapshot.data!.docs;
-                  // Verifica los valores nulos en municipios y municipioData
-                  if (municipios.isEmpty) {
-                    return const Center(
-                        child: Text("No hay municipios disponibles"));
-                  }
-                  // Calcular la altura basada en la cantidad de municipios
-                  double containerHeight =
-                      municipios.length * 155.0; // Altura de cada tarjeta
-                  return Column(
-                    children: [
-                      Stack(
-                        children: [
-                          // Colocar la imagen del primer municipio en la parte inferior
-                          Image.network(
-                            municipios.isNotEmpty
-                                ? municipios.first.get("Imagen") ?? ""
-                                : "",
-                            fit: BoxFit.cover,
-                            height: 400,
-                            width: MediaQuery.of(context).size.width,
-                          ),
-                          // Colocar la ventana de resultados encima de la imagen
-                          Positioned.fill(
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 55),
-                              child: Column(
-                                children: [
-                                  // Mostrar los resultados de la búsqueda solo cuando se haya ingresado texto
-                                  if (_textEditingController.text.isNotEmpty)
-                                    Container(
-                                      color: Colors
-                                          .white60, // Color de fondo para el ListView.builder
-                                      height: 200,
-                                      child: ListView.builder(
-                                        padding: EdgeInsets.zero,
-                                        //physics: const NeverScrollableScrollPhysics(),
-                                        shrinkWrap: true,
-                                        itemCount: searchResults.length,
-                                        itemBuilder: (context, index) {
-                                          final result = searchResults[index];
-                                          return ListTile(
-                                            title: Row(
-                                              children: [
-                                                const Icon(
-                                                    Icons.location_on_outlined),
-                                                Text(
-                                                  result["Nombre"],
-                                                  style: const TextStyle(
-                                                      color: Colors.black,
-                                                      fontFamily: "Medium"),
-                                                ),
-                                              ],
-                                            ),
-                                            onTap: () {
-                                              String idMunicipio =
-                                                  searchResults[index]
-                                                      ["idMunicipio"];
-                                              String idTurismo =
-                                                  searchResults[index]
-                                                      ["idTurismo"];
-                                              if (searchResults[index]
-                                                  .containsKey("idSitio")) {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        DetailPageSitios(
-                                                      sitio: searchResults[index],
-                                                      IdDepartamento: idTurismo,
-                                                      IdMunicipio: idMunicipio,
-                                                    ),
-                                                  ),
-                                                );
-                                              } else {
-                                                // Si es un municipio, navega a la vista de municipio
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        VistaMunicipioMagic(
-                                                      idMunicipio: idMunicipio,
-                                                      idDepartamento: idTurismo,
-                                                    ),
-                                                  ),
-                                                );
-                                              }
-                                            },
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      // Mostrar la lista de municipios
-                      SizedBox(
-                        height: containerHeight,
-                        width: MediaQuery.of(context).size.width,
-                        child: ListView(
-                          physics: const NeverScrollableScrollPhysics(),
-                          padding: EdgeInsets.zero,
-                          children:
-                              municipios.map((DocumentSnapshot municipio) {
-                            Map<String, dynamic> municipioData =
-                                municipio.data() as Map<String, dynamic>;
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => VistaMunicipioMagic(
-                                      idMunicipio: municipio.id,
-                                      idDepartamento: widget.idDepartamento,
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: Card(
-                                margin: const EdgeInsets.only(bottom: 5),
-                                child: Column(
-                                  children: [
-                                    Image.network(
-                                      municipioData["ImagenUrl"],
-                                      fit: BoxFit.cover,
-                                      height: 150,
-                                      width: double.infinity,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                    ],
-                  );
-                },
+            actions: [
+              Container(
+                margin: const EdgeInsets.only(right: 20),
+                child: const Image(
+                  image: AssetImage("assets/Logo/Logo_Blanco.png"),
+                  width: 100,
+                  height: 75,
+                ),
               ),
             ],
           ),
-        ),
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection("Turismo")
+                      .doc(widget.idDepartamento)
+                      .collection("Municipios")
+                      .snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasError) {
+                      return Text("Error: ${snapshot.error}");
+                    }
+                    // Manejo de datos nulos
+                    if (!snapshot.hasData) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    // Obtener la lista de documentos de municipios
+                    List<DocumentSnapshot> municipios = snapshot.data!.docs;
+                    // Verifica los valores nulos en municipios y municipioData
+                    if (municipios.isEmpty) {
+                      return const Center(
+                          child: Text("No hay municipios disponibles"));
+                    }
+                    // Calcular la altura basada en la cantidad de municipios
+                    double containerHeight =
+                        municipios.length * 155.0; // Altura de cada tarjeta
+                    return Column(
+                      children: [
+                        Stack(
+                          children: [
+                            // Colocar la imagen del primer municipio en la parte inferior
+                            Image.network(
+                              municipios.isNotEmpty
+                                  ? municipios.first.get("Imagen") ?? ""
+                                  : "",
+                              fit: BoxFit.cover,
+                              height: 400,
+                              width: MediaQuery.of(context).size.width,
+                            ),
+                            // Colocar la ventana de resultados encima de la imagen
+                            Positioned.fill(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 55),
+                                child: Column(
+                                  children: [
+                                    // Mostrar los resultados de la búsqueda solo cuando se haya ingresado texto
+                                    if (_textEditingController.text.isNotEmpty)
+                                      Container(
+                                        color: Colors
+                                            .white60, // Color de fondo para el ListView.builder
+                                        height: 200,
+                                        child: ListView.builder(
+                                          padding: EdgeInsets.zero,
+                                          //physics: const NeverScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          itemCount: searchResults.length,
+                                          itemBuilder: (context, index) {
+                                            final result = searchResults[index];
+                                            return ListTile(
+                                              title: Row(
+                                                children: [
+                                                  const Icon(
+                                                      Icons.location_on_outlined),
+                                                  Text(
+                                                    result["Nombre"],
+                                                    style: const TextStyle(
+                                                        color: Colors.black,
+                                                        fontFamily: "Medium"),
+                                                  ),
+                                                ],
+                                              ),
+                                              onTap: () {
+                                                String idMunicipio =
+                                                    searchResults[index]
+                                                        ["idMunicipio"];
+                                                String idTurismo =
+                                                    searchResults[index]
+                                                        ["idTurismo"];
+                                                if (searchResults[index]
+                                                    .containsKey("idSitio")) {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          DetailPageSitios(
+                                                        sitio: searchResults[index],
+                                                        IdDepartamento: idTurismo,
+                                                        IdMunicipio: idMunicipio,
+                                                      ),
+                                                    ),
+                                                  );
+                                                } else {
+                                                  // Si es un municipio, navega a la vista de municipio
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          VistaMunicipioMagic(
+                                                        idMunicipio: idMunicipio,
+                                                        idDepartamento: idTurismo,
+                                                      ),
+                                                    ),
+                                                  );
+                                                }
+                                              },
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        // Mostrar la lista de municipios
+                        SizedBox(
+                          height: containerHeight,
+                          width: MediaQuery.of(context).size.width,
+                          child: ListView(
+                            physics: const NeverScrollableScrollPhysics(),
+                            padding: EdgeInsets.zero,
+                            children:
+                                municipios.map((DocumentSnapshot municipio) {
+                              Map<String, dynamic> municipioData =
+                                  municipio.data() as Map<String, dynamic>;
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => VistaMunicipioMagic(
+                                        idMunicipio: municipio.id,
+                                        idDepartamento: widget.idDepartamento,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Card(
+                                  margin: const EdgeInsets.only(bottom: 5),
+                                  child: Column(
+                                    children: [
+                                      Image.network(
+                                        municipioData["ImagenUrl"],
+                                        fit: BoxFit.cover,
+                                        height: 150,
+                                        width: double.infinity,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+      ),
     );
   }
 }
