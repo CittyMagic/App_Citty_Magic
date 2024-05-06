@@ -3,17 +3,19 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'slider.dart';
+
 
 class DetailPageSitios extends StatefulWidget {
-  final String IdDepartamento;
-  final String IdMunicipio;
+  final String idDepartamento;
+  final String idMunicipio;
   final Map<String, dynamic> sitio;
 
   const DetailPageSitios(
       {super.key,
       required this.sitio,
-      required this.IdDepartamento,
-      required this.IdMunicipio});
+      required this.idDepartamento,
+      required this.idMunicipio});
 
   @override
   State<DetailPageSitios> createState() => _DetailPageSitiosState();
@@ -57,7 +59,6 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
         ),
       );
     } catch (e) {
-      print('Error: $e');
       return const SizedBox.shrink();
     }
   }
@@ -78,7 +79,6 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
         ),
       );
     } catch (e) {
-      print('Error: $e');
       return const SizedBox.shrink();
     }
   }
@@ -99,7 +99,6 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
         ),
       );
     } catch (e) {
-      print('Error: $e');
       return const SizedBox.shrink();
     }
   }
@@ -152,8 +151,7 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
         ),
       );
     } catch (e) {
-      print('Error: $e');
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
   }
 
@@ -228,7 +226,7 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   }
                 },
               ),
@@ -237,6 +235,8 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
               subIzq("SubP2"),
               parrafo("DescripcionP2"),
               espacio("DescripcionP2"),
+
+              const SliderWidget(folderPath: 'gs://appcittymagic.appspot.com/fotos/App Img/2.Turismo/1.Chocó/2.Tadó/Descubre y Explora/Mumbú/Sliders Img'),
       
               subIzq("SubP3"),
               parrafo("DescripcionP3"),
@@ -275,7 +275,7 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   }
                 },
               ),
@@ -292,7 +292,7 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   }
                 },
               ),
@@ -315,7 +315,7 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   }
                 },
               ),
@@ -337,7 +337,7 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   }
                 },
               ),
@@ -359,7 +359,7 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   }
                 },
               ),
@@ -381,7 +381,7 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   }
                 },
               ),
@@ -403,7 +403,7 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   }
                 },
               ),
@@ -425,7 +425,7 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   }
                 },
               ),
@@ -447,7 +447,7 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   }
                 },
               ),
@@ -469,7 +469,7 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   }
                 },
               ),
@@ -491,7 +491,7 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   }
                 },
               ),
