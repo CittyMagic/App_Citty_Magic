@@ -1,4 +1,7 @@
+import 'package:cittyquibdo/EjemploVistaComercio.dart';
 import 'package:cittyquibdo/Google_Sign_In.dart';
+import 'package:cittyquibdo/HomePage.dart';
+import 'package:cittyquibdo/HomePrincipal.dart';
 import 'package:cittyquibdo/SplashPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +17,23 @@ void main() async {
   // Inicializar Firebase
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
+  // Configurar Firestore antes de iniciar la aplicación
+  configurarFirestore();
+
   // Iniciar la aplicación
   runApp(const MyPage());
+}
+
+// Función para configurar Firestore
+void configurarFirestore() {
+  // Configurar los ajustes de Firestore
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  // Establecer el tamaño del caché a 10 MB y habilitar la persistencia offline
+  firestore.settings = firestore.settings.copyWith(
+    cacheSizeBytes: 10 * 1024 * 1024, // 10 MB
+    persistenceEnabled: true,
+  );
 }
 
 class MyPage extends StatefulWidget {
@@ -27,22 +45,7 @@ class MyPage extends StatefulWidget {
 
 class _MyPageState extends State<MyPage> {
 
-  // Variable para almacenar los datos cargados de shared_preferences
-  String? storedData;
 
-  @override
-  void initState() {
-    super.initState();
-    // Cargar datos de shared_preferences cuando se inicia la aplicación
-    cargarDatosDeSharedPreferences();
-  }
-  // Función para cargar datos de shared_preferences
-  Future<void> cargarDatosDeSharedPreferences() async {
-    String data = await leerPreferencias('firebaseDataKey');
-    setState(() {
-      storedData = data; // Almacenar los datos en una variable
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,26 +60,4 @@ class _MyPageState extends State<MyPage> {
   }
 }
 
-// Clase para manejar el estado del contador (caché de widgets)
-class CounterProvider with ChangeNotifier {
-  int _counter = 0;
 
-  int get counter => _counter;
-
-  void increment() {
-    _counter++;
-    notifyListeners();
-  }
-}
-
-// Función para guardar preferencias usando shared_preferences
-void guardarPreferencias(String clave, String valor) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setString(clave, valor);
-}
-
-// Función para leer preferencias usando shared_preferences
-Future<String> leerPreferencias(String clave) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  return prefs.getString(clave) ?? '';
-}

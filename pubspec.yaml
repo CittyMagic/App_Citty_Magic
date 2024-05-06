@@ -53,7 +53,6 @@ dependencies:
   cached_network_image: ^3.3.1
   connectivity_plus: ^6.0.3
   http: 1.2.1
-  firebase_storage: 11.7.4
 
   flutter:
     sdk: flutter

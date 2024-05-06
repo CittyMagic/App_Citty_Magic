@@ -2,6 +2,8 @@ import 'package:cittyquibdo/DetailPageComercio.dart';
 import 'package:cittyquibdo/VistaCategoria.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geolocator/geolocator.dart' as geolocator;
 
 class VistaComercioQuibdo extends StatefulWidget {
   const VistaComercioQuibdo({super.key});
@@ -12,7 +14,17 @@ class VistaComercioQuibdo extends StatefulWidget {
 
 class _VistaComercioQuibdoState extends State<VistaComercioQuibdo> {
   TextEditingController _textEditingController = TextEditingController();
+  String? selectedId;
+  String? imageUrl;
+  Position? currentPosition;
   List searchResults = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _textEditingController = TextEditingController();
+    _getCurrentPosition(); // Obtener la posición actual del usuario
+  }
 
   @override
   void dispose() {
@@ -20,63 +32,245 @@ class _VistaComercioQuibdoState extends State<VistaComercioQuibdo> {
     super.dispose();
   }
 
-  void searchInFirebase(String query) async {
-    //Convertir la consulta a minúscula
-    String formattedQuery = query.toLowerCase();
+  void searchInFirebase(String query) {
+    // Implementación de búsqueda
+  }
 
-    final comercioSnapshot =
-        await FirebaseFirestore.instance.collection("Comercio").get();
+  Future<void> _getCurrentPosition() async {
+    // Pide permisos y obtiene la ubicación actual del usuario
+    bool serviceEnabled = await geolocator.Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Manejar caso en el que el servicio de ubicación no está habilitado
+      return;
+    }
 
-    List<Map<String, dynamic>> allResults = [];
-
-    for (final categoriaDoc in comercioSnapshot.docs) {
-      final comerciosSnapshot =
-          await categoriaDoc.reference.collection("Comercios").get();
-
-      for (final comercioDoc in comerciosSnapshot.docs) {
-        Map<String, dynamic> comercioData = comercioDoc.data();
-
-        if ((comercioData.containsKey("Nombre") &&
-            comercioData["Nombre"] != null &&
-            comercioData["Nombre"].toLowerCase().contains(formattedQuery)) ||
-            (comercioData.containsKey("Clave") &&
-                comercioData["Clave"] != null &&
-                comercioData["Clave"].toLowerCase().contains(formattedQuery))) {
-          allResults.add({
-            "Nombre": comercioData["Nombre"],
-            "idComercio": comercioDoc.id,
-            "idCategoria": categoriaDoc.id
-          });
-        }
+    LocationPermission permission = await geolocator.Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await geolocator.Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Manejar caso en el que el permiso está denegado
+        return;
       }
     }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Manejar caso en el que el permiso está denegado permanentemente
+      return;
+    }
+
+    // Obtener la ubicación actual del usuario
+    currentPosition = await geolocator.Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.best,
+    );
+
     setState(() {
-      searchResults = allResults;
+      // Actualizar el estado con la posición actual del usuario
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _textEditingController = TextEditingController();
+  Future<String?> _getMunicipioIdIfWithinGeoFence() async {
+    // Si no hay posición actual, no se puede verificar
+    if (currentPosition == null) {
+      return null;
+    }
+
+    // Obtiene los documentos de la colección "Municipios"
+    final docs = await FirebaseFirestore.instance.collection('Municipios').get();
+
+    for (var doc in docs.docs) {
+      final data = doc.data() as Map<String, dynamic>?;
+
+      // Si el documento tiene datos y coordenadas de geolocalización
+      if (data != null && data.containsKey('Mapa')) {
+        GeoPoint municipioGeoPoint = data['Mapa'] as GeoPoint;
+
+        // Calcula la distancia entre la posición actual del usuario y las coordenadas del municipio
+        double distanceInMeters = geolocator.Geolocator.distanceBetween(
+          currentPosition!.latitude,
+          currentPosition!.longitude,
+          municipioGeoPoint.latitude,
+          municipioGeoPoint.longitude,
+        );
+
+        // Define el radio de geolocalización en metros (ejemplo: 1000 metros)
+        double geoFenceRadius = 1000.0;
+
+        // Si la distancia está dentro del radio de geolocalización
+        if (distanceInMeters <= geoFenceRadius) {
+          // Retorna el ID del municipio si está dentro del radio
+          return doc.id;
+        }
+      }
+    }
+
+    return null; // Retorna null si no se encuentra ningún municipio dentro del radio
   }
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder<String?>(
+      future: _getMunicipioIdIfWithinGeoFence(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // Muestra un indicador de carga mientras se calcula la ubicación
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text("Error: ${snapshot.error}"));
+        } else {
+          // Si el usuario está dentro del radio de geolocalización del municipio
+          selectedId = snapshot.data;
+
+          if (selectedId != null) {
+            // Usuario dentro del radio de geolocalización del municipio
+            return _buildVistaComercio(context);
+          } else {
+            // Usuario fuera del radio de geolocalización, mostrar AppBar para seleccionar la ciudad
+            return _buildCitySelection(context);
+          }
+        }
+      },
+    );
+  }
+
+  Widget _buildCitySelection(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Selecciona tu ciudad"),
+      ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('Municipios').snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          final docs = snapshot.data!.docs;
+
+          final items = docs.map((doc) {
+            final data = doc.data() as Map<String, dynamic>?;
+
+            // Verificar que 'data' no sea nulo y sea un Map<String, dynamic>
+            if (data != null) {
+              final nombre = data['Nombre'] as String?;
+
+              if (nombre != null) {
+                // Crear un DropdownMenuItem
+                return DropdownMenuItem<String>(
+                  value: doc.id,
+                  child: Text(
+                    nombre,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                );
+              }
+            }
+
+            return null;
+          }).where((item) => item != null).cast<DropdownMenuItem<String>>().toList();
+
+          return Center(
+            child: DropdownButton<String>(
+              value: selectedId,
+              onChanged: (newValue) {
+                setState(() {
+                  selectedId = newValue;
+                  // Future para que el cambio de ciudad sea confirmado
+                  Navigator.pop(context, true);
+                });
+              },
+              items: items,
+              hint: const Text('Selecciona una ciudad'),
+              icon: const Icon(Icons.arrow_drop_down, color: Colors.black, size: 40),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildVistaComercio(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          toolbarHeight: 75,
           backgroundColor: Colors.transparent,
-          elevation: 0,
+          title: StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance.collection('Municipios').snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Container(); // Retorna un contenedor vacío mientras no hay datos
+              }
+
+              final docs = snapshot.data!.docs;
+
+              // Procesar los documentos de la colección 'Municipios'
+              final items = docs
+                  .map((doc) {
+                final data = doc.data() as Map<String, dynamic>?;
+
+                // Verificar que 'data' no sea nulo y sea un Map<String, dynamic>
+                if (data != null) {
+                  // Obtener el nombre del municipio desde 'data'
+                  final nombre = data['Nombre'] as String?;
+
+                  // Verificar si el nombre no es nulo
+                  if (nombre != null) {
+                    // Si tienes una propiedad 'BannerUrl' en los documentos
+                    final bannerUrl =
+                    data['ImagenPortada'] as String?;
+
+                    // Crear un DropdownMenuItem
+                    return DropdownMenuItem<String>(
+                      value: doc.id,
+                      child: Text(
+                        nombre,
+                        overflow: TextOverflow.ellipsis, // Limita la longitud del texto mostrado
+                      ),
+                      onTap: () {
+                        // Actualizar la imagen cuando se seleccione un municipio
+                        if (bannerUrl != null) {
+                          setState(() {
+                            imageUrl =
+                                bannerUrl; // Actualiza la imagen con la URL seleccionada
+                          });
+                        }
+                      },
+                    );
+                  }
+                }
+                // Retornar null si no se pudo crear el DropdownMenuItem
+                return null;
+              })
+                  .where((item) => item != null) // Filtrar elementos nulos
+                  .cast<DropdownMenuItem<String>>() // Convertir a tipo correcto
+                  .toList(); // Convertir a lista
+
+              return DropdownButton<String>(
+                value: selectedId,
+                onChanged: (newValue) {
+                  setState(() {
+                    selectedId = newValue;
+                    // Actualizar la URL de la imagen cuando cambia la selección
+                    final doc = docs.firstWhere((d) => d.id == newValue);
+                    final data = doc.data() as Map<String, dynamic>?;
+                    if (data != null) {
+                      imageUrl = data['ImagenPortada'] as String?;
+                    }
+                  });
+                },
+                items: items,
+                hint: const Text('Selecciona una opción'),
+                icon: const Icon(Icons.arrow_drop_down, color: Colors.black, size: 40),
+              );
+            },
+          ),
           actions: [
             Container(
               margin: const EdgeInsets.only(right: 20),
               child: const Image(
                 image: AssetImage("assets/Logo/Logo_Blanco.png"),
-                width: 125,
-                height: 80,
+                width: 100,
+                height: 75,
               ),
             ),
           ],
@@ -87,10 +281,15 @@ class _VistaComercioQuibdoState extends State<VistaComercioQuibdo> {
               Container(
                 width: MediaQuery.of(context).size.width,
                 height: 450,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage("assets/banner-citty2.jpg"),
-                      fit: BoxFit.cover),
+                    image: imageUrl != null
+                        ? NetworkImage(
+                        imageUrl!) // Mostrar la imagen de la URL seleccionada
+                        : const AssetImage("assets/banner-citty2.jpg")
+                    as ImageProvider, // Imagen predeterminada
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 child: Scaffold(
                   backgroundColor: Colors.black54,
@@ -103,7 +302,7 @@ class _VistaComercioQuibdoState extends State<VistaComercioQuibdo> {
                             const Text(
                               "Descubre Quibdó",
                               style: TextStyle(
-                                fontSize: 35,
+                                fontSize: 30,
                                 color: Colors.white,
                                 fontFamily: 'ExtraBold',
                               ),
@@ -148,9 +347,7 @@ class _VistaComercioQuibdoState extends State<VistaComercioQuibdo> {
                                         fontSize: 20,
                                         fontFamily: 'Regular',
                                       ),
-                                      contentPadding:
-                                      const EdgeInsets.symmetric(
-                                          vertical: 9),
+                                      contentPadding: const EdgeInsets.symmetric(vertical: 9),
                                     ),
                                     onChanged: (query) {
                                       setState(() {});
@@ -159,8 +356,7 @@ class _VistaComercioQuibdoState extends State<VistaComercioQuibdo> {
                                   ),
                                   const SizedBox(height: 10),
                                   Visibility(
-                                    visible:
-                                        _textEditingController.text.isNotEmpty,
+                                    visible: _textEditingController.text.isNotEmpty,
                                     child: Expanded(
                                       child: Container(
                                         color: Colors.white70,
@@ -171,56 +367,49 @@ class _VistaComercioQuibdoState extends State<VistaComercioQuibdo> {
                                             return ListTile(
                                               title: Row(
                                                 children: [
-                                                  const Icon(
-                                                      Icons.search_sharp),
+                                                  const Icon(Icons.search_sharp),
                                                   const SizedBox(width: 15),
-                                                  Text(searchResults[index]
-                                                          ["Nombre"] ??
-                                                      ""),
+                                                  Text(searchResults[index]["Nombre"] ?? ""),
                                                 ],
                                               ),
-                                                onTap: () async {
-                                                  String idComercio = searchResults[index]["idComercio"];
-                                                  String idCategoria = searchResults[index]["idCategoria"];
+                                              onTap: () async {
+                                                String idComercio = searchResults[index]["idComercio"];
+                                                String idCategoria = searchResults[index]["idCategoria"];
 
-                                                  // Obtener los detalles completos del comercio desde Firestore usando los IDs
-                                                  DocumentSnapshot comercioSnapshot = await FirebaseFirestore.instance
-                                                      .collection("Comercio")
-                                                      .doc(idCategoria)
-                                                      .collection("Comercios")
-                                                      .doc(idComercio)
-                                                      .get();
+                                                // Obtener los detalles completos del comercio desde Firestore usando los IDs
+                                                DocumentSnapshot comercioSnapshot = await FirebaseFirestore.instance
+                                                    .collection("Comercio")
+                                                    .doc(idCategoria)
+                                                    .collection("Comercios")
+                                                    .doc(idComercio)
+                                                    .get();
 
-                                                  // Verificar si hay datos en el snapshot antes de convertirlos
-                                                  if (comercioSnapshot.exists) {
-                                                    Map<String, dynamic> comercioData =
-                                                    comercioSnapshot.data() as Map<String, dynamic>;
+                                                if (comercioSnapshot.exists) {
+                                                  Map<String, dynamic> comercioData = comercioSnapshot.data() as Map<String, dynamic>;
 
-                                                    // Navegar a la página de detalles del comercio pasando los datos del comercio como argumento
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) => DetailPageComercio(comercio: comercioData),
-                                                      ),
-                                                    );
-                                                  } else {
-                                                    // Manejar caso en el que el comercio no existe
-                                                    // Por ejemplo, mostrar un mensaje de error
-                                                    showDialog(
-                                                      context: context,
-                                                      builder: (context) => AlertDialog(
-                                                        title: const Text("Error"),
-                                                        content: const Text("El comercio no existe."),
-                                                        actions: [
-                                                          TextButton(
-                                                            onPressed: () => Navigator.pop(context),
-                                                            child: const Text("Aceptar"),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    );
-                                                  }
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) => DetailPageComercio(comercio: comercioData),
+                                                    ),
+                                                  );
+                                                } else {
+                                                  // Manejar caso en el que el comercio no existe
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (context) => AlertDialog(
+                                                      title: const Text("Error"),
+                                                      content: const Text("El comercio no existe."),
+                                                      actions: [
+                                                        TextButton(
+                                                          onPressed: () => Navigator.pop(context),
+                                                          child: const Text("Aceptar"),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  );
                                                 }
+                                              },
                                             );
                                           },
                                         ),
@@ -249,70 +438,83 @@ class _VistaComercioQuibdoState extends State<VistaComercioQuibdo> {
                 ),
               ),
               const SizedBox(width: 10),
+              // StreamBuilder para la subcolección "Categorías" del municipio seleccionado
               SizedBox(
                 height: MediaQuery.of(context).size.height + 110,
-                child: StreamBuilder<QuerySnapshot>(
+                child: selectedId == null
+                    ? const Center(
+                  child: Text("No se encuentra ningún comercio en este municipio."),
+                )
+                    : StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
-                      .collection("Comercio")
+                      .collection("Municipios")
+                      .doc(selectedId)
+                      .collection("Categorias")
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      List<DocumentSnapshot>? tiposComercio =
-                          snapshot.data?.docs;
-                      return SizedBox(
-                        height: MediaQuery.of(context).size.height,
-                        child: GridView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          padding: EdgeInsets.zero,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            crossAxisSpacing: 10.0,
-                            mainAxisSpacing: 10.0,
-                          ),
-                          itemCount: tiposComercio?.length ?? 0,
-                          itemBuilder: (context, index) {
-                            var tipoComercio = tiposComercio![index];
-                            String nombre = tipoComercio["Nombre"];
-                            String imagenUrl = tipoComercio["ImagenUrl"];
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => VistaCategoria(
-                                        idCategoria: tipoComercio.id),
-                                  ),
-                                );
-                              },
-                              child: Card(
-                                elevation: 5.0,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.network(
-                                      imagenUrl,
-                                      width: MediaQuery.of(context).size.width,
-                                      height: 80,
-                                      fit: BoxFit.contain,
+                      List<DocumentSnapshot>? categorias = snapshot.data?.docs;
+
+                      if (categorias == null || categorias.isEmpty) {
+                        // Si no hay categorías, muestra un mensaje
+                        return const Center(
+                          child: Text("No se encuentra ningún comercio en este municipio."),
+                        );
+                      } else {
+                        // Si hay categorías, muestra el GridView con las tarjetas
+                        return SizedBox(
+                          height: MediaQuery.of(context).size.height,
+                          child: GridView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            padding: EdgeInsets.zero,
+                            gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              crossAxisSpacing: 10.0,
+                              mainAxisSpacing: 10.0,
+                            ),
+                            itemCount: categorias.length,
+                            itemBuilder: (context, index) {
+                              var categoria = categorias[index];
+                              String nombre = categoria["Nombre"];
+                              String imagenUrl = categoria["ImagenCard"];
+
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => VistaCategoria(idCategoria: categoria.id),
                                     ),
-                                    const SizedBox(
-                                      height: 3,
-                                    ),
-                                    Text(
-                                      nombre,
-                                      style: const TextStyle(
-                                        fontFamily: 'Bold',
-                                        fontSize: 10,
+                                  );
+                                },
+                                child: Card(
+                                  elevation: 5.0,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image.network(
+                                        imagenUrl,
+                                        width: MediaQuery.of(context).size.width,
+                                        height: 80,
+                                        fit: BoxFit.contain,
                                       ),
-                                    ),
-                                  ],
+                                      const SizedBox(height: 3),
+                                      Text(
+                                        nombre,
+                                        style: const TextStyle(
+                                          fontFamily: 'Bold',
+                                          fontSize: 10,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                        ),
-                      );
+                              );
+                            },
+                          ),
+                        );
+                      }
                     } else if (snapshot.hasError) {
                       return Center(
                         child: Text("Error: ${snapshot.error}"),
