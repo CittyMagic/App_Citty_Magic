@@ -3,7 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import 'slider.dart';
+import 'package:cittyquibdo/componentes/slider.dart';
 
 
 class DetailPageSitios extends StatefulWidget {

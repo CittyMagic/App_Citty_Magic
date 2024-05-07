@@ -1,5 +1,5 @@
-import 'package:cittyquibdo/EjemploLogin.dart';
-import 'package:cittyquibdo/Repositorio/RegisterUserFirebase.dart';
+import 'package:cittyquibdo/ejemplo_login.dart';
+import 'package:cittyquibdo/Repositorio/register_user_firebase.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 

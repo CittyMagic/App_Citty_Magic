@@ -1,6 +1,6 @@
-import 'package:cittyquibdo/Bottom_Nav.dart';
-import 'package:cittyquibdo/HomePrincipal.dart';
-import 'package:cittyquibdo/Routes.dart';
+import 'package:cittyquibdo/bottom_nav.dart';
+import 'package:cittyquibdo/home_principal.dart';
+import 'package:cittyquibdo/routes.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {

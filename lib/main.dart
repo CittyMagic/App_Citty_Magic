@@ -1,14 +1,16 @@
-import 'package:cittyquibdo/EjemploVistaComercio.dart';
-import 'package:cittyquibdo/Google_Sign_In.dart';
-import 'package:cittyquibdo/HomePage.dart';
-import 'package:cittyquibdo/HomePrincipal.dart';
-import 'package:cittyquibdo/SplashPage.dart';
+//import 'package:cittyquibdo/EjemploVistaComercio.dart'; no encuentro este archivo en el directorio
+import 'package:cittyquibdo/google_sign_in.dart';
+import 'package:cittyquibdo/home_page.dart';
+import 'package:cittyquibdo/home_principal.dart';
+import 'package:cittyquibdo/splash_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
-//import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+
 
 void main() async {
   // Inicializar el binding de Flutter
@@ -53,7 +55,7 @@ class _MyPageState extends State<MyPage> {
       create: (context) => GoogleSignInProvider(),
       child: const MaterialApp(
         home: Scaffold(
-          body: SplashPage(),
+          body: DetailsPageComercio(),
         ),
       ),
     );

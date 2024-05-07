@@ -1,5 +1,5 @@
 
-import 'package:cittyquibdo/Login.dart';
+import 'package:cittyquibdo/login.dart';
 import 'package:flutter/material.dart';
 
 class SplashPage extends StatefulWidget {

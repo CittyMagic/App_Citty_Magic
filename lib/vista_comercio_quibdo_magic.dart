@@ -1,5 +1,5 @@
-import 'package:cittyquibdo/DetailPageComercio.dart';
-import 'package:cittyquibdo/VistaCategoria.dart';
+import 'package:cittyquibdo/detail_page_comercio.dart';
+import 'package:cittyquibdo/vista_categoria.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';

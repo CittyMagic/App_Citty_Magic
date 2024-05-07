@@ -1,5 +1,5 @@
-import 'package:cittyquibdo/Google_Sign_In.dart';
-import 'package:cittyquibdo/HomePage.dart';
+import 'package:cittyquibdo/google_sign_in.dart';
+import 'package:cittyquibdo/home_page.dart';
 import 'package:cittyquibdo/LoginPhoneNumber.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

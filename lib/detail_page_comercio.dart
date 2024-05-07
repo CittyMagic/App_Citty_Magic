@@ -149,6 +149,7 @@ class _DetailPageComercioState extends State<DetailPageComercio> {
                               side: BorderSide.none),
                         ),
                       ),
+                      
                       onPressed: () {},
                       child: const Row(
                         children: [

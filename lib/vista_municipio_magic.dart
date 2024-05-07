@@ -1,4 +1,4 @@
-import 'package:cittyquibdo/DetailPageSitio.dart';
+import 'package:cittyquibdo/detail_page_sitio.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
