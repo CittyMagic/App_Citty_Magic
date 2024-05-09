@@ -278,7 +278,7 @@ class _HomePrincipalState extends State<HomePrincipal> {
                                       itemBuilder: (context, index) {
                                         final resultado = resultados[index];
                                         // Verifica que la clave 'Nombre' esté presente
-                                        final nombre = resultado['Nombre'] != null ? resultado['Nombre'] : 'Sin nombre';
+                                        final nombre = resultado['Nombre'] ?? 'Sin nombre';
 
                                         return ListTile(
                                           title: Row(
@@ -302,8 +302,8 @@ class _HomePrincipalState extends State<HomePrincipal> {
                                                   builder: (context) =>
                                                       DetailPageSitios(
                                                         sitio: resultado,
-                                                        IdDepartamento: idTurismo,
-                                                        IdMunicipio: idMunicipio,
+                                                        idDepartamento: idTurismo,
+                                                        idMunicipio: idMunicipio,
                                                       ),
                                                 ),
                                               );

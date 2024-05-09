@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class DetailPageComercio extends StatefulWidget {
-  final idDepartamento;
-  final idMunicipio;
+  final String? idDepartamento; 
+  final String? idMunicipio;
   final Map<String, dynamic> comercio;
   const DetailPageComercio({super.key, required this.comercio, this.idDepartamento, this.idMunicipio});
 
@@ -112,10 +112,10 @@ class _DetailPageComercioState extends State<DetailPageComercio> {
                   children: [
                     ElevatedButton(
                       style: ButtonStyle(
-                        fixedSize: WidgetStateProperty.all(
+                        fixedSize: MaterialStateProperty.all(
                           const Size(130, 30),
                         ),
-                        shape: WidgetStateProperty.all(
+                        shape: MaterialStateProperty.all(
                           const RoundedRectangleBorder(
                               borderRadius: BorderRadius.zero,
                               side: BorderSide.none),
@@ -140,10 +140,10 @@ class _DetailPageComercioState extends State<DetailPageComercio> {
                     const SizedBox(width: 20),
                     ElevatedButton(
                       style: ButtonStyle(
-                        fixedSize: WidgetStateProperty.all(
+                        fixedSize: MaterialStateProperty.all(
                           const Size(130, 20),
                         ),
-                        shape: WidgetStateProperty.all(
+                        shape: MaterialStateProperty.all(
                           const RoundedRectangleBorder(
                               borderRadius: BorderRadius.zero,
                               side: BorderSide.none),
@@ -185,7 +185,7 @@ class _DetailPageComercioState extends State<DetailPageComercio> {
                         children: [
                           TextButton(
                             style: ButtonStyle(
-                              shape: WidgetStateProperty.all(
+                              shape: MaterialStateProperty.all(
                                 const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.zero,
                                     side: BorderSide.none),
@@ -198,7 +198,7 @@ class _DetailPageComercioState extends State<DetailPageComercio> {
                           ),
                           TextButton(
                             style: ButtonStyle(
-                              shape: WidgetStateProperty.all(
+                              shape: MaterialStateProperty.all(
                                 const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.zero,
                                     side: BorderSide.none),
@@ -211,7 +211,7 @@ class _DetailPageComercioState extends State<DetailPageComercio> {
                           ),
                           TextButton(
                             style: ButtonStyle(
-                              shape: WidgetStateProperty.all(
+                              shape: MaterialStateProperty.all(
                                 const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.zero,
                                     side: BorderSide.none),
@@ -224,7 +224,7 @@ class _DetailPageComercioState extends State<DetailPageComercio> {
                           ),
                           TextButton(
                             style: ButtonStyle(
-                              shape: WidgetStateProperty.all(
+                              shape: MaterialStateProperty.all(
                                 const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.zero,
                                     side: BorderSide.none),
@@ -399,7 +399,7 @@ class _DetailPageComercioState extends State<DetailPageComercio> {
                       ),
                       TextButton(
                         style: ButtonStyle(
-                          shape: WidgetStateProperty.all(
+                          shape: MaterialStateProperty.all(
                             const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.zero,
                                 side: BorderSide.none),
@@ -415,7 +415,7 @@ class _DetailPageComercioState extends State<DetailPageComercio> {
                       ),
                       TextButton(
                         style: ButtonStyle(
-                          shape: WidgetStateProperty.all(
+                          shape: MaterialStateProperty.all(
                             const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.zero,
                                 side: BorderSide.none),

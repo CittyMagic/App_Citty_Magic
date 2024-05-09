@@ -22,7 +22,7 @@ class _RegisterUsuarioState extends State<RegisterUsuario> {
   void registrarUsuario() async {
     email = _correo.text;
     password = _password.text;
-    final datos = await objetoufb.RegisterUsers(email, password);
+    final datos = await objetoufb.registerUsers(email, password);
     if (datos == "weak-password") {
       Fluttertoast.showToast(
           msg: "Contraseña debe tener minimo 6 caracteres",

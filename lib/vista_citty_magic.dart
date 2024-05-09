@@ -65,7 +65,7 @@ class _VistaCityMagicState extends State<VistaCityMagic> {
             .where("Nombre")
             .get()
             .catchError((error) {
-          return null;
+          return error;
         });
 
         // Verificar si la subcolección 'Sitios' existe antes de continuar
@@ -343,8 +343,8 @@ class _VistaCityMagicState extends State<VistaCityMagic> {
                                                           DetailPageSitios(
                                                         sitio:
                                                             searchResults[index],
-                                                        IdDepartamento: idTurismo,
-                                                        IdMunicipio: idMunicipio,
+                                                        idDepartamento: idTurismo,
+                                                        idMunicipio: idMunicipio,
                                                       ),
                                                     ),
                                                   );

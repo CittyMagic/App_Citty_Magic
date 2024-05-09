@@ -1,13 +1,13 @@
 
 class Usuario{
-  var _id;
-  var _nombre;
-  var _apellidos;
-  var _departamento;
-  var _direccion;
-  var _celular;
-  var _correo;
-  var _password;
+  String _id= '';
+  String _nombre= '';
+  String _apellidos = '';
+  String _departamento= '';
+  String _direccion= '';
+  String _celular= '';
+  String _correo= '';
+  String _password= '';
 
   get id => _id;
 
@@ -60,7 +60,7 @@ class Usuario{
   Usuario(this._id, this._nombre, this._apellidos, this._departamento, this._direccion,
       this._celular, this._correo, this._password);
 
-  Usuario.Empty();
+  Usuario.empty();
 
   Usuario.fromJson(Map<String,  dynamic>json):
   _id=json["id"],

@@ -173,10 +173,10 @@ class _LoginPhoneNumberState extends State<LoginPhoneNumber> {
                   const SizedBox(height: 15),
                   ElevatedButton(
                     style: ButtonStyle(
-                      backgroundColor: WidgetStateProperty.all<Color>(
+                      backgroundColor: MaterialStateProperty.all<Color>(
                         const Color.fromRGBO(255, 109, 0, 1),
                       ),
-                      minimumSize: WidgetStateProperty.all<Size>(
+                      minimumSize: MaterialStateProperty.all<Size>(
                         const Size(300, 40), // Ancho y alto del botón
                       ),
                     ),

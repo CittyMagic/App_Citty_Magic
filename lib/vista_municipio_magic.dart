@@ -59,7 +59,7 @@ class _VistaMunicipioMagicState extends State<VistaMunicipioMagic> {
             .where("Nombre")
             .get()
             .catchError((error) {
-          return null;
+          return error;
         });
 
         // Verificar si la subcolección 'Sitios' existe antes de continuar
@@ -81,7 +81,7 @@ class _VistaMunicipioMagicState extends State<VistaMunicipioMagic> {
             .where("Nombre")
             .get()
             .catchError((error) {
-          return null;
+          return error;
         });
 
         for (final comidaDoc in (comidaSnapshot.docs)) {
@@ -102,7 +102,7 @@ class _VistaMunicipioMagicState extends State<VistaMunicipioMagic> {
             .where("Nombre")
             .get()
             .catchError((error) {
-          return null;
+          return error;
         });
 
         for (final entretenimientoDoc in (entretenimientoSnapshot.docs)) {
@@ -126,7 +126,7 @@ class _VistaMunicipioMagicState extends State<VistaMunicipioMagic> {
             .where("Nombre")
             .get()
             .catchError((error) {
-          return null;
+          return error;
         });
 
         for (final culturaDoc in (cultutaSnapshot.docs)) {
@@ -147,7 +147,7 @@ class _VistaMunicipioMagicState extends State<VistaMunicipioMagic> {
             .where("Nombre")
             .get()
             .catchError((error) {
-          return null;
+          return error;
         });
 
         for (final informacionDoc in (informacionSnapshot.docs)) {
@@ -321,8 +321,8 @@ class _VistaMunicipioMagicState extends State<VistaMunicipioMagic> {
                                                     builder: (context) =>
                                                         DetailPageSitios(
                                                       sitio: searchResults[index],
-                                                      IdDepartamento: idTurismo,
-                                                      IdMunicipio: idMunicipio,
+                                                      idDepartamento: idTurismo,
+                                                      idMunicipio: idMunicipio,
                                                     ),
                                                   ),
                                                 );
@@ -448,9 +448,9 @@ class _VistaMunicipioMagicState extends State<VistaMunicipioMagic> {
                                             builder: (context) =>
                                                 DetailPageSitios(
                                               sitio: sitio,
-                                              IdDepartamento:
+                                              idDepartamento:
                                                   widget.idDepartamento,
-                                              IdMunicipio: widget.idMunicipio,
+                                              idMunicipio: widget.idMunicipio,
                                             ),
                                           ),
                                         );
@@ -558,9 +558,9 @@ class _VistaMunicipioMagicState extends State<VistaMunicipioMagic> {
                                             builder: (context) =>
                                                 DetailPageSitios(
                                               sitio: sitio,
-                                              IdDepartamento:
+                                              idDepartamento:
                                                   widget.idDepartamento,
-                                              IdMunicipio: widget.idMunicipio,
+                                              idMunicipio: widget.idMunicipio,
                                             ),
                                           ),
                                         );
@@ -669,9 +669,9 @@ class _VistaMunicipioMagicState extends State<VistaMunicipioMagic> {
                                             builder: (context) =>
                                                 DetailPageSitios(
                                               sitio: sitio,
-                                              IdDepartamento:
+                                              idDepartamento:
                                                   widget.idDepartamento,
-                                              IdMunicipio: widget.idMunicipio,
+                                              idMunicipio: widget.idMunicipio,
                                             ),
                                           ),
                                         );
@@ -779,9 +779,9 @@ class _VistaMunicipioMagicState extends State<VistaMunicipioMagic> {
                                             builder: (context) =>
                                                 DetailPageSitios(
                                               sitio: sitio,
-                                              IdDepartamento:
+                                              idDepartamento:
                                                   widget.idDepartamento,
-                                              IdMunicipio: widget.idMunicipio,
+                                              idMunicipio: widget.idMunicipio,
                                             ),
                                           ),
                                         );
@@ -888,9 +888,9 @@ class _VistaMunicipioMagicState extends State<VistaMunicipioMagic> {
                                             builder: (context) =>
                                                 DetailPageSitios(
                                               sitio: sitio,
-                                              IdDepartamento:
+                                              idDepartamento:
                                                   widget.idDepartamento,
-                                              IdMunicipio: widget.idMunicipio,
+                                              idMunicipio: widget.idMunicipio,
                                             ),
                                           ),
                                         );
@@ -942,7 +942,7 @@ class _VistaMunicipioMagicState extends State<VistaMunicipioMagic> {
                         Set<Marker> _markers = {};
 
                         // Crear un marcador en la ubicación deseada
-                        final marker = Marker(
+                        final marker =  Marker(
                           markerId: MarkerId('ubicacion'),
                           position: mapa,
                           infoWindow: InfoWindow(

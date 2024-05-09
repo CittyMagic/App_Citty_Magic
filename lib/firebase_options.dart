@@ -13,10 +13,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -40,6 +37,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '377307332673',
     projectId: 'appcittymagic',
     authDomain: 'appcittymagic.firebaseapp.com',
+    databaseURL: 'https://appcittymagic-default-rtdb.firebaseio.com',
     storageBucket: 'appcittymagic.appspot.com',
     measurementId: 'G-JY5VGXCZML',
   );
@@ -49,6 +47,7 @@ class DefaultFirebaseOptions {
     appId: '1:377307332673:android:002cc0c92a9b49db70c6c0',
     messagingSenderId: '377307332673',
     projectId: 'appcittymagic',
+    databaseURL: 'https://appcittymagic-default-rtdb.firebaseio.com',
     storageBucket: 'appcittymagic.appspot.com',
   );
 
@@ -57,7 +56,23 @@ class DefaultFirebaseOptions {
     appId: '1:377307332673:ios:dcfb86db6a85c72f70c6c0',
     messagingSenderId: '377307332673',
     projectId: 'appcittymagic',
+    databaseURL: 'https://appcittymagic-default-rtdb.firebaseio.com',
     storageBucket: 'appcittymagic.appspot.com',
+    androidClientId: '377307332673-f230lfsbhbktumsoet4ouora1evpotni.apps.googleusercontent.com',
+    iosClientId: '377307332673-33obpbv8v8sa4rmh6me8v71hiljlrnu6.apps.googleusercontent.com',
     iosBundleId: 'com.example.cittyquibdo',
   );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyAVTtUUoFdbsxkuHZPFUZczpoWOLyB0slg',
+    appId: '1:377307332673:ios:a9ca5c50f052876870c6c0',
+    messagingSenderId: '377307332673',
+    projectId: 'appcittymagic',
+    databaseURL: 'https://appcittymagic-default-rtdb.firebaseio.com',
+    storageBucket: 'appcittymagic.appspot.com',
+    androidClientId: '377307332673-f230lfsbhbktumsoet4ouora1evpotni.apps.googleusercontent.com',
+    iosClientId: '377307332673-jccdq2l5neocpq05vvm6mntoobrne011.apps.googleusercontent.com',
+    iosBundleId: 'y',
+  );
+
 }

@@ -1,10 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:cittyquibdo/componentes/slider.dart';
-
 
 class DetailPageSitios extends StatefulWidget {
   final String idDepartamento;
@@ -26,6 +23,14 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
+  }
+
+  Widget getSliderWidget(String campo) {
+    if (widget.sitio[campo] != null) {
+      return SliderWidget(folderPath: widget.sitio[campo]);
+    } else {
+      return Container(); // O cualquier otro widget que desees devolver en caso de que widget.sitio["ImagenesP"] sea nulo
+    }
   }
 
 // Linea divisora Subtítulos.
@@ -70,10 +75,12 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
         padding: const EdgeInsets.only(left: 10, right: 10),
         child: Text(
           widget.sitio[campo],
-          textAlign: TextAlign.left, // Alinea explícitamente el texto a la izquierda
+          textAlign:
+              TextAlign.left, // Alinea explícitamente el texto a la izquierda
           style: const TextStyle(
             fontSize: 18,
-            fontFamily: "semibold", // Suponiendo que tienes una fuente llamada "Bold"
+            fontFamily:
+                "semibold", // Suponiendo que tienes una fuente llamada "Bold"
             color: Color.fromRGBO(0, 0, 0, 1), // Color negro
           ),
         ),
@@ -108,49 +115,6 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
     if (widget.sitio[campo] != null) {
       return const SizedBox(height: 16);
     } else {
-      return const SizedBox.shrink();
-    }
-  }
-
-
-
-// Carrusel de imagenes
-  Future<Widget> carrusel(String campo) async {
-    try {
-      List<dynamic> imagenes = widget.sitio[campo];
-
-      // Precarga de imágenes
-      for (String imageUrl in imagenes) {
-        await precacheImage(NetworkImage(imageUrl), context);
-      }
-
-      // Creación del widget carrusel
-      return CarouselSlider(
-        items: imagenes.cast<String>().map((imagenUrl) {
-          return Builder(
-            builder: (context) => CachedNetworkImage(
-              imageUrl: imagenUrl,
-              fit: BoxFit.cover,
-              //placeholder: (context, url) => Center(child: CircularProgressIndicator()),
-              //errorWidget: (context, url, error) => Icon(Icons.error),
-            ),
-          );
-        }).toList(),
-        options: CarouselOptions(
-          height: 300,
-          aspectRatio: 16 / 9,
-          viewportFraction: 1,
-          initialPage: 0,
-          enableInfiniteScroll: true,
-          autoPlay: true,
-          autoPlayInterval: const Duration(seconds: 4),
-          autoPlayAnimationDuration: const Duration(milliseconds: 400),
-          autoPlayCurve: Curves.fastOutSlowIn,
-          enlargeCenterPage: true,
-          scrollDirection: Axis.horizontal,
-        ),
-      );
-    } catch (e) {
       return const SizedBox.shrink();
     }
   }
@@ -218,84 +182,44 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
               ),
               parrafo("DescripcionP1"),
               espacio("DescripcionP1"),
-              FutureBuilder<Widget>(
-                future: carrusel("ImagenesP"),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return snapshot.data!;
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    return const CircularProgressIndicator();
-                  }
-                },
-              ),
+              getSliderWidget("ImagenesP"),
               espacio("ImagenesP"),
+
               espacio("SubP2"),
               subIzq("SubP2"),
               parrafo("DescripcionP2"),
               espacio("DescripcionP2"),
 
-              const SliderWidget(folderPath: 'gs://appcittymagic.appspot.com/fotos/App Img/2.Turismo/1.Chocó/2.Tadó/Descubre y Explora/Mumbú/Sliders Img'),
-      
               subIzq("SubP3"),
               parrafo("DescripcionP3"),
               espacio("DescripcionP3"),
-      
               subIzq("SubP4"),
+
               parrafo("DescripcionP4"),
               espacio("DescripcionP4"),
-      
               subIzq("SubP5"),
               parrafo("DescripcionP5"),
               espacio("DescripcionP5"),
-      
               subIzq("SubP6"),
               parrafo("DescripcionP6"),
               espacio("DescripcionP6"),
-      
               subIzq("SubP7"),
               parrafo("DescripcionP7"),
               espacio("DescripcionP7"),
-      
               subIzq("SubP8"),
               parrafo("DescripcionP8"),
               espacio("DescripcionP8"),
-      
               espacio("Subtitulo1"),
               subtitulo("Subtitulo1"),
               diviSub("Subtitulo1"),
               espacio("Subtitulo1"),
-              FutureBuilder<Widget>(
-                future: carrusel("Imagenes1"),
-                // Pasa el nombre del campo como argumento
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return snapshot.data!;
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    return const CircularProgressIndicator();
-                  }
-                },
-              ),
+
+              getSliderWidget("ImagenesP"),
               espacio("Imagenes1"),
               parrafo("Descripcion1"),
               espacio("Descripcion1"),
-      
-              FutureBuilder<Widget>(
-                future: carrusel("Imagenes1b"),
-                // Pasa el nombre del campo como argumento
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return snapshot.data!;
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    return const CircularProgressIndicator();
-                  }
-                },
-              ),
+              /*
+              getSliderWidget("Imagenes1b"),
               espacio("Imagenes1b"),
       
               parrafo("Descripcion1b"),
@@ -306,19 +230,8 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
               subtitulo("Subtitulo2"),
               diviSub("Subtitulo2"),
               espacio("Subtitulo2"),
-              FutureBuilder<Widget>(
-                future: carrusel("Imagenes2"),
-      
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return snapshot.data!;
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    return const CircularProgressIndicator();
-                  }
-                },
-              ),
+              
+              getSliderWidget("Imagenes2"),
               espacio("Imagenes2"),
               parrafo("Descripcion2"),
               espacio("Descripcion2"),
@@ -499,8 +412,8 @@ class _DetailPageSitiosState extends State<DetailPageSitios> {
               parrafo("Descripcion10"),
               espacio("Descripcion10"),
       
-      
-      
+      */
+
               if (widget.sitio["Mapa"] != null)
                 SizedBox(
                   height: 300,

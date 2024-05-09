@@ -29,7 +29,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   normalize: ^0.9.1
-  firebase_core: ^2.27.0
+  firebase_core: ^2.31.0 
   firebase_auth: ^4.17.8
   fluttertoast: ^8.2.4
   cloud_firestore: ^4.15.8
@@ -53,12 +53,15 @@ dependencies:
   cached_network_image: ^3.3.1
   connectivity_plus: ^6.0.3
   http: 1.2.1
-  firebase_storage: 11.7.4
+  firebase_storage: ^11.7.5
+  geolocator: ^11.0.0
 
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
   lecle_flutter_carousel_pro: ^0.0.3
+  change_app_package_name: ^1.0.2
+  flutter_cache_manager: ^3.3.2
 
 
 

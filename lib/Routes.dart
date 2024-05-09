@@ -1,6 +1,6 @@
 import 'package:cittyquibdo/home_principal.dart';
-import 'package:cittyquibdo/VistaAgendaQuibdoMagic.dart';
-import 'package:cittyquibdo/VistaComercioQuibdoMagic.dart';
+import 'package:cittyquibdo/vista_agenda_quibdo_magic.dart';
+import 'package:cittyquibdo/vista_comercio_quibdo_magic.dart';
 import 'package:flutter/material.dart';
 
 class Routes extends StatelessWidget {

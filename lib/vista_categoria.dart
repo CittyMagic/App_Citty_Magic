@@ -212,10 +212,10 @@ class _VistaCategoriaState extends State<VistaCategoria> {
                 ElevatedButton(
                   onPressed: () {},
                   style: ButtonStyle(
-                    fixedSize: WidgetStateProperty.all(
+                    fixedSize: MaterialStateProperty.all(
                       const Size(190, 30),
                     ),
-                    shape: WidgetStateProperty.all(
+                    shape: MaterialStateProperty.all(
                       const RoundedRectangleBorder(
                           borderRadius: BorderRadius.zero,
                           side: BorderSide.none,
@@ -245,10 +245,10 @@ class _VistaCategoriaState extends State<VistaCategoria> {
                 ElevatedButton(
                   onPressed: () {},
                   style: ButtonStyle(
-                    fixedSize: WidgetStateProperty.all(
+                    fixedSize: MaterialStateProperty.all(
                       const Size(190, 20),
                     ),
-                    shape: WidgetStateProperty.all(
+                    shape: MaterialStateProperty.all(
                       const RoundedRectangleBorder(
                           borderRadius: BorderRadius.zero,
                           side: BorderSide.none),
